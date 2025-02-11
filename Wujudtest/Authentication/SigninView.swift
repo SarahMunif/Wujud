@@ -64,22 +64,22 @@ struct SigninView: View {
                         viewModel.signIn()
                     } label: {
                         Text("Sign in")
-                            .font(.headline)
-                            .foregroundStyle(.white)
-                            .frame(height: 55)
-                            .frame(maxWidth: .infinity)
-                            .background(Color.green)
-                            .cornerRadius(10)
-                    }
+                               .font(.headline)
+                               .foregroundStyle(.white)
+                               .frame(height: 55)
+                               .frame(maxWidth: .infinity)
+                               .background(Color.green)
+                               .cornerRadius(10)
+                       }
 
-                    NavigationLink(destination: HomeView(), isActive: $viewModel.isSignedIn) {
-                        EmptyView()
-                    }
-                }
-                .padding()
-            }
-            .scrollDismissesKeyboard(.interactively)
-            .navigationTitle("Sign in")
-        }
-    }
-}
+                       NavigationLink(destination: HomeView(), isActive: $viewModel.isSignedIn) {
+                           EmptyView()
+                       }
+                   }
+                   .padding()
+               }
+               .scrollDismissesKeyboard(.interactively)
+               .navigationTitle("Sign in")
+           }
+       }
+   }

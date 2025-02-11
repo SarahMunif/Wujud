@@ -1,21 +1,3 @@
-//
-//  SigninAdminView.swift
-//  Wujudtest
-//
-//  Created by su on 03/02/2025.
-//
-//
-//import SwiftUI
-//
-//struct SigninAdminView: View {
-//    var body: some View {
-//        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-//    }
-//}
-//
-//#Preview {
-//    SigninAdminView()
-//}
 import SwiftUI
 import Firebase
 import FirebaseFirestore
@@ -44,7 +26,6 @@ final class SigninAdminViewModel: ObservableObject {
             }
         }
     }
-
     func createNewUser(firstName: String, lastName: String, phoneNumber: String, companyName: String, jobTitle: String, industry: String) async {
         guard let user = user else {
             print("No authenticated user found")
@@ -74,7 +55,6 @@ final class SigninAdminViewModel: ObservableObject {
         }
     }
 }
-
 struct SigninAdminView: View {
     @StateObject private var viewModel = SigninAdminViewModel()
 
@@ -111,7 +91,6 @@ struct SigninAdminView: View {
         }
     }
 }
-
 struct ExtraFieldView: View {
     @State private var firstName = ""
     @State private var lastName = ""
@@ -125,70 +104,68 @@ struct ExtraFieldView: View {
  
     
     @ObservedObject var viewModel: SigninAdminViewModel
-
     var body: some View {
-        VStack {
-            TextField("First Name", text: $firstName)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
-            
-            TextField("Last Name", text: $lastName)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
-
-            TextField("Phone Number", text: $phoneNumber)
-                .keyboardType(.phonePad)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
-
-            TextField("company Name", text: $companyName)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
-            
-            TextField("job Title", text: $jobTitle)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
-            
-            TextField("industry", text: $industry)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
-            .padding()
-
-            Button {
-                Task {
-                    await viewModel.createNewUser(
-                        firstName: firstName,
-                        lastName: lastName,
-                        phoneNumber: phoneNumber,
-                        companyName: companyName,
-                        jobTitle: jobTitle,
-                        industry: industry
-                    )
-                    // Navigate to the next view after user creation
-                    isNavigating = true
-                }
-            } label: {
-                Text("Submit")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(height: 55)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.green)
+            VStack {
+                TextField("First Name", text: $firstName)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
                     .cornerRadius(10)
-            }
-            
-            // NavigationLink for the next view
-            NavigationLink(destination: HomeView(), isActive: $isNavigating) {
-                EmptyView()
-            }
-        }
-        .padding()
-        .navigationTitle("Extra Fields")
-    }
-}
+                
+                TextField("Last Name", text: $lastName)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
+
+                TextField("Phone Number", text: $phoneNumber)
+                    .keyboardType(.phonePad)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
+
+                TextField("company Name", text: $companyName)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
+                
+                TextField("job Title", text: $jobTitle)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
+                
+                TextField("industry", text: $industry)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
+                .padding()
+                Button {
+                      Task {
+                          await viewModel.createNewUser(
+                              firstName: firstName,
+                              lastName: lastName,
+                              phoneNumber: phoneNumber,
+                              companyName: companyName,
+                              jobTitle: jobTitle,
+                              industry: industry
+                          )
+                          // Navigate to the next view after user creation
+                          isNavigating = true
+                      }
+                  } label: {
+                      Text("Submit")
+                          .font(.headline)
+                          .foregroundColor(.white)
+                          .frame(height: 55)
+                          .frame(maxWidth: .infinity)
+                          .background(Color.green)
+                          .cornerRadius(10)
+                  }
+                  
+                  // NavigationLink for the next view
+                  NavigationLink(destination: HomeView(), isActive: $isNavigating) {
+                      EmptyView()
+                  }
+              }
+              .padding()
+              .navigationTitle("Extra Fields")
+          }
+      }
