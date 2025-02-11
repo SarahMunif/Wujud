@@ -17,7 +17,7 @@ final class SigninEmailViewModel: ObservableObject {
         }
         Task {
             do {
-                let AuthDataResultModel = try await AuthenticationManger.shared.createUser(email: email, password: password)
+                _ = try await AuthenticationManger.shared.createUser(email: email, password: password)
                 print("Success")
                 isSignedIn = true
                 user = Auth.auth().currentUser // Store the actual User object
@@ -96,91 +96,89 @@ struct SigninEmailView: View {
 
 struct ExtraFieldsView: View {
     @State private var firstName = ""
-    @State private var lastName = ""
-    @State private var phoneNumber = ""
-    @State private var selectedMajor = "Computer Science" // Set default value
-    @State private var selectedRole = "Student" // Set default value
-    @State private var selectedEducationLevel = "Student" // Set default value
-    
-    @State private var isNavigating = false // State variable for navigation
-    
-    let majors = ["Computer Science", "AI"]
-    let roles = ["Student", "Employee"]
-    let educationLevels = ["Student", "Graduate"]
-    
-    @ObservedObject var viewModel: SigninEmailViewModel
+      @State private var lastName = ""
+      @State private var phoneNumber = ""
+      @State private var selectedMajor = "Computer Science" // Set default value
+      @State private var selectedRole = "Student" // Set default value
+      @State private var selectedEducationLevel = "Student" // Set default value
+      
+      @State private var isNavigating = false // State variable for navigation
+      
+      let majors = ["Computer Science", "AI"]
+      let roles = ["Student", "Employee"]
+      let educationLevels = ["Student", "Graduate"]
+      
+      @ObservedObject var viewModel: SigninEmailViewModel
 
-    var body: some View {
-        VStack {
-            TextField("First Name", text: $firstName)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
-            
-            TextField("Last Name", text: $lastName)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
+      var body: some View {
+          VStack {
+              TextField("First Name", text: $firstName)
+                  .padding()
+                  .background(Color.gray.opacity(0.2))
+                  .cornerRadius(10)
+              
+              TextField("Last Name", text: $lastName)
+                  .padding()
+                  .background(Color.gray.opacity(0.2))
+                  .cornerRadius(10)
 
-            TextField("Phone Number", text: $phoneNumber)
-                .keyboardType(.phonePad)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
+              TextField("Phone Number", text: $phoneNumber)
+                  .keyboardType(.phonePad)
+                  .padding()
+                  .background(Color.gray.opacity(0.2))
+                  .cornerRadius(10)
 
-            Picker("Select Major", selection: $selectedMajor) {
-                ForEach(majors, id: \.self) { major in
-                    Text(major).tag(major)
-                }
-            }
-            .pickerStyle(MenuPickerStyle())
-            .padding()
+              Picker("Select Major", selection: $selectedMajor) {
+                  ForEach(majors, id: \.self) { major in
+                      Text(major).tag(major)
+                  }
+              }
+              .pickerStyle(MenuPickerStyle())
+              .padding()
 
-            Picker("Select Role", selection: $selectedRole) {
-                ForEach(roles, id: \.self) { role in
-                    Text(role).tag(role)
-                }
-            }
-            .pickerStyle(MenuPickerStyle())
-            .padding()
+              Picker("Select Role", selection: $selectedRole) {
+                  ForEach(roles, id: \.self) { role in
+                      Text(role).tag(role)
+                  }
+              }
+              .pickerStyle(MenuPickerStyle())
+              .padding()
 
-            Picker("Select Education Level", selection: $selectedEducationLevel) {
-                ForEach(educationLevels, id: \.self) { level in
-                    Text(level).tag(level)
-                }
-            }
-            .pickerStyle(MenuPickerStyle())
-            .padding()
+              Picker("Select Education Level", selection: $selectedEducationLevel) {
+                  ForEach(educationLevels, id: \.self) { level in
+                      Text(level).tag(level)
+                  }
+              }
+              .pickerStyle(MenuPickerStyle())
+              .padding()
 
-            Button {
-                Task {
-                    await viewModel.createNewUser(
-                        firstName: firstName,
-                        lastName: lastName,
-                        phoneNumber: phoneNumber,
-                        educationLevel: selectedEducationLevel,
-                        major: selectedMajor,
-                        role: selectedRole
-                    )
-                    // Navigate to the next view after user creation
-                    isNavigating = true
-                }
-            } label: {
-                Text("Submit")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(height: 55)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.green)
-                    .cornerRadius(10)
-            }
-            
-            // NavigationLink for the next view
-            NavigationLink(destination: HomeView(), isActive: $isNavigating) {
-                EmptyView()
-            }
-        }
-        .padding()
-        .navigationTitle("Extra Fields")
-    }
-}
+              Button {
+                  Task {
+                      await viewModel.createNewUser(
+                          firstName: firstName,
+                          lastName: lastName,
+                          phoneNumber: phoneNumber,
+                          educationLevel: selectedEducationLevel,
+                          major: selectedMajor,
+                          role: selectedRole
+                      )
+                      // Navigate to the next view after user creation
+                      isNavigating = true
+                  }
+              } label: {
+                  Text("Submit")
+                      .font(.headline)
+                      .foregroundColor(.white)
+                      .frame(height: 55)
+                      .frame(maxWidth: .infinity)
+                      .background(Color.green)
+                      .cornerRadius(10)
+              }
+          }
+          .padding()
+          .navigationTitle("Extra Fields")
+          .navigationDestination(isPresented: $isNavigating) {
+              HomeView() // Navigate to HomeView when isNavigating becomes true
+          }
+      }
+  }

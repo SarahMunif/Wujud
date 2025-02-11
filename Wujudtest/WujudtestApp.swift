@@ -3,16 +3,16 @@ import Firebase
 import FirebaseCore
 import FirebaseFirestore
 
+
 @main
 struct WujudtestApp: App {
     init() {
-            FirebaseApp.configure()
-        
+        FirebaseApp.configure()
     }
     
     var body: some Scene {
         WindowGroup {
-            RootView()
+            ContentView()
         }
     }
 }

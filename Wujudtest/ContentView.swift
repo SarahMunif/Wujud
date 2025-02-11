@@ -2,23 +2,20 @@
 //  ContentView.swift
 //  Wujudtest
 //
-//  Created by su on 22/01/2025.
+//  Created by su on 11/02/2025.
 //
 
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        
+        NavigationStack{
+            AuthenticationView()
+            
         }
-        .padding()
     }
 }
-
 #Preview {
     ContentView()
 }

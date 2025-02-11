@@ -1,11 +1,15 @@
 import SwiftUI
 import FirebaseAuth
+import FirebaseFirestore
 
 @MainActor
 final class SigninViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
     @Published var isSignedIn = false
+    @Published var isAdmin = false
+    @Published var firstName = ""
+    @Published var lastName = ""
     @Published var errorMessage: String?
     
     func signIn() {
@@ -14,26 +18,45 @@ final class SigninViewModel: ObservableObject {
             return
         }
         
-        Auth.auth().signIn(withEmail: email, password: password) { (authResult, error) in
+        Auth.auth().signIn(withEmail: email, password: password) { [weak self] (authResult, error) in
             if let error = error as NSError? {
                 switch AuthErrorCode(rawValue: error.code) {
-                case .operationNotAllowed:
-                    self.errorMessage = "Email/password authentication is not enabled."
+
                 case .wrongPassword:
-                    self.errorMessage = "Email and password do not match. Please try again."
+                    self?.errorMessage = "Email and password do not match. Please try again."
                 case .invalidEmail:
-                    self.errorMessage = "Invalid email format. Please enter a valid email."
+                    self?.errorMessage = "Invalid email format. Please enter a valid email."
                 default:
-                    self.errorMessage = "Authentication failed. Please check your credentials and try again."
+                    self?.errorMessage = "Email and password do not match. Please try again."
                 }
             } else {
                 print("✅ User signed in successfully")
-                self.isSignedIn = true
+                self?.checkUserRole()
             }
         }
     }
+    
+    private func checkUserRole() {
+        guard let user = Auth.auth().currentUser else { return }
+        
+        let db = Firestore.firestore()
+        db.collection("admins").document(user.uid).getDocument { [weak self] (document, error) in
+            if let error = error {
+                print("Error fetching user role: \(error)")
+                self?.isAdmin = false // Default to regular user if there's an error
+            } else {
+                if let data = document?.data() {
+                    self?.isAdmin = true
+                    self?.firstName = data["firstName"] as? String ?? ""
+                    self?.lastName = data["lastName"] as? String ?? ""
+                } else {
+                    self?.isAdmin = false
+                }
+            }
+            self?.isSignedIn = true // Set signed-in status after role check
+        }
+    }
 }
-
 struct SigninView: View {
     @StateObject private var viewModel = SigninViewModel()
 
@@ -42,8 +65,6 @@ struct SigninView: View {
             ScrollView {
                 VStack {
                     TextField("Email ..", text: $viewModel.email)
-                        .keyboardType(.emailAddress)
-                        .autocapitalization(.none)
                         .padding()
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(10)
@@ -64,22 +85,25 @@ struct SigninView: View {
                         viewModel.signIn()
                     } label: {
                         Text("Sign in")
-                               .font(.headline)
-                               .foregroundStyle(.white)
-                               .frame(height: 55)
-                               .frame(maxWidth: .infinity)
-                               .background(Color.green)
-                               .cornerRadius(10)
-                       }
-
-                       NavigationLink(destination: HomeView(), isActive: $viewModel.isSignedIn) {
-                           EmptyView()
-                       }
-                   }
-                   .padding()
-               }
-               .scrollDismissesKeyboard(.interactively)
-               .navigationTitle("Sign in")
-           }
-       }
-   }
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                            .frame(height: 55)
+                            .frame(maxWidth: .infinity)
+                            .background(Color.green)
+                            .cornerRadius(10)
+                    }
+                }
+                .padding()
+                .scrollDismissesKeyboard(.interactively)
+                .navigationTitle("Sign in")
+                .navigationDestination(isPresented: $viewModel.isSignedIn) {
+                    if viewModel.isAdmin {
+                        AdminHomeView(firstName: viewModel.firstName, lastName: viewModel.lastName) // Pass names here
+                    } else {
+                        HomeView() // Navigate to HomeView if regular user
+                    }
+                }
+            }
+        }
+    }
+}
