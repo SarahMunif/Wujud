@@ -7,12 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03BD2979C7CB062C102DADFE /* Pods_WujudtestUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 728EB918E632D71439821C69 /* Pods_WujudtestUITests.framework */; };
+		49C612373F75D9F84978DDC8 /* Pods_Wujudtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0223CAA63113CE6810CCEF7A /* Pods_Wujudtest.framework */; };
 		6A63371B2D50BA8500DF96DF /* AdminManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A63371A2D50BA8500DF96DF /* AdminManger.swift */; };
 		6A7861142D4F5BD1005F9245 /* UserManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7861132D4F5BD1005F9245 /* UserManger.swift */; };
 		6AA6F1062D41827B0009F311 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 6AA6F1052D41827B0009F311 /* FirebaseAnalytics */; };
 		6AA6F1082D41827B0009F311 /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 6AA6F1072D41827B0009F311 /* FirebaseAuthCombine-Community */; };
 		6AA6F10B2D4254270009F311 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 6AA6F10A2D4254270009F311 /* FirebaseAuth */; };
 		6AA6F11F2D452CF30009F311 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 6AA6F11E2D452CF30009F311 /* FirebaseFirestore */; };
+		FB42A64B94F99BB16E713B57 /* Pods_WujudtestTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13AD4EB22DCE9F3FFB2ABA50 /* Pods_WujudtestTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,11 +36,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0223CAA63113CE6810CCEF7A /* Pods_Wujudtest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Wujudtest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		09C6DEC8EC31414E1B16F2D5 /* Pods-WujudtestTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WujudtestTests.debug.xcconfig"; path = "Target Support Files/Pods-WujudtestTests/Pods-WujudtestTests.debug.xcconfig"; sourceTree = "<group>"; };
+		0D3BF0F040500E509F876AC8 /* Pods-Wujudtest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wujudtest.release.xcconfig"; path = "Target Support Files/Pods-Wujudtest/Pods-Wujudtest.release.xcconfig"; sourceTree = "<group>"; };
+		13AD4EB22DCE9F3FFB2ABA50 /* Pods_WujudtestTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WujudtestTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		42D44359B3F0B38C7D975376 /* Pods-WujudtestUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WujudtestUITests.debug.xcconfig"; path = "Target Support Files/Pods-WujudtestUITests/Pods-WujudtestUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		687906082EF219745C2A7915 /* Pods-WujudtestTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WujudtestTests.release.xcconfig"; path = "Target Support Files/Pods-WujudtestTests/Pods-WujudtestTests.release.xcconfig"; sourceTree = "<group>"; };
 		6A63371A2D50BA8500DF96DF /* AdminManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminManger.swift; sourceTree = "<group>"; };
 		6A7861132D4F5BD1005F9245 /* UserManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManger.swift; sourceTree = "<group>"; };
 		6AA6F0D42D416C6B0009F311 /* Wujudtest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wujudtest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AA6F0E52D416C6E0009F311 /* WujudtestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WujudtestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AA6F0EF2D416C6E0009F311 /* WujudtestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WujudtestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		728EB918E632D71439821C69 /* Pods_WujudtestUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WujudtestUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3FB2F6CC71B8110C0675197 /* Pods-Wujudtest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wujudtest.debug.xcconfig"; path = "Target Support Files/Pods-Wujudtest/Pods-Wujudtest.debug.xcconfig"; sourceTree = "<group>"; };
+		C43CE504AEF1F82AF988965E /* Pods-WujudtestUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WujudtestUITests.release.xcconfig"; path = "Target Support Files/Pods-WujudtestUITests/Pods-WujudtestUITests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -67,6 +79,7 @@
 				6AA6F11F2D452CF30009F311 /* FirebaseFirestore in Frameworks */,
 				6AA6F10B2D4254270009F311 /* FirebaseAuth in Frameworks */,
 				6AA6F1082D41827B0009F311 /* FirebaseAuthCombine-Community in Frameworks */,
+				49C612373F75D9F84978DDC8 /* Pods_Wujudtest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB42A64B94F99BB16E713B57 /* Pods_WujudtestTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,12 +95,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03BD2979C7CB062C102DADFE /* Pods_WujudtestUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5EAA679310019E0CE798FB87 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A3FB2F6CC71B8110C0675197 /* Pods-Wujudtest.debug.xcconfig */,
+				0D3BF0F040500E509F876AC8 /* Pods-Wujudtest.release.xcconfig */,
+				09C6DEC8EC31414E1B16F2D5 /* Pods-WujudtestTests.debug.xcconfig */,
+				687906082EF219745C2A7915 /* Pods-WujudtestTests.release.xcconfig */,
+				42D44359B3F0B38C7D975376 /* Pods-WujudtestUITests.debug.xcconfig */,
+				C43CE504AEF1F82AF988965E /* Pods-WujudtestUITests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		6A7861122D4F5B9F005F9245 /* Firestore */ = {
 			isa = PBXGroup;
 			children = (
@@ -99,12 +127,13 @@
 		6AA6F0CB2D416C6B0009F311 = {
 			isa = PBXGroup;
 			children = (
-				6A7861122D4F5B9F005F9245 /* Firestore */,
 				6AA6F0D62D416C6B0009F311 /* Wujudtest */,
+				6A7861122D4F5B9F005F9245 /* Firestore */,
 				6AA6F0E82D416C6E0009F311 /* WujudtestTests */,
 				6AA6F0F22D416C6E0009F311 /* WujudtestUITests */,
 				6AA6F1092D4254270009F311 /* Frameworks */,
 				6AA6F0D52D416C6B0009F311 /* Products */,
+				5EAA679310019E0CE798FB87 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -121,6 +150,9 @@
 		6AA6F1092D4254270009F311 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0223CAA63113CE6810CCEF7A /* Pods_Wujudtest.framework */,
+				13AD4EB22DCE9F3FFB2ABA50 /* Pods_WujudtestTests.framework */,
+				728EB918E632D71439821C69 /* Pods_WujudtestUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -132,9 +164,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6AA6F0F92D416C6E0009F311 /* Build configuration list for PBXNativeTarget "Wujudtest" */;
 			buildPhases = (
+				452018C482ADBA472087899E /* [CP] Check Pods Manifest.lock */,
 				6AA6F0D02D416C6B0009F311 /* Sources */,
 				6AA6F0D12D416C6B0009F311 /* Frameworks */,
 				6AA6F0D22D416C6B0009F311 /* Resources */,
+				D771B55912B99639FDB9588E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -158,6 +192,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6AA6F0FC2D416C6E0009F311 /* Build configuration list for PBXNativeTarget "WujudtestTests" */;
 			buildPhases = (
+				6E7D5C0EEF235377BBCFF7C0 /* [CP] Check Pods Manifest.lock */,
 				6AA6F0E12D416C6E0009F311 /* Sources */,
 				6AA6F0E22D416C6E0009F311 /* Frameworks */,
 				6AA6F0E32D416C6E0009F311 /* Resources */,
@@ -171,8 +206,6 @@
 				6AA6F0E82D416C6E0009F311 /* WujudtestTests */,
 			);
 			name = WujudtestTests;
-			packageProductDependencies = (
-			);
 			productName = WujudtestTests;
 			productReference = 6AA6F0E52D416C6E0009F311 /* WujudtestTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -181,6 +214,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6AA6F0FF2D416C6E0009F311 /* Build configuration list for PBXNativeTarget "WujudtestUITests" */;
 			buildPhases = (
+				9AEE9067244CBEF764089063 /* [CP] Check Pods Manifest.lock */,
 				6AA6F0EB2D416C6E0009F311 /* Sources */,
 				6AA6F0EC2D416C6E0009F311 /* Frameworks */,
 				6AA6F0ED2D416C6E0009F311 /* Resources */,
@@ -194,8 +228,6 @@
 				6AA6F0F22D416C6E0009F311 /* WujudtestUITests */,
 			);
 			name = WujudtestUITests;
-			packageProductDependencies = (
-			);
 			productName = WujudtestUITests;
 			productReference = 6AA6F0EF2D416C6E0009F311 /* WujudtestUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -270,6 +302,92 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		452018C482ADBA472087899E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Wujudtest-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6E7D5C0EEF235377BBCFF7C0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WujudtestTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9AEE9067244CBEF764089063 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WujudtestUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D771B55912B99639FDB9588E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Wujudtest/Pods-Wujudtest-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Wujudtest/Pods-Wujudtest-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Wujudtest/Pods-Wujudtest-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6AA6F0D02D416C6B0009F311 /* Sources */ = {
@@ -348,7 +466,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -409,7 +527,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -427,6 +545,7 @@
 		};
 		6AA6F0FA2D416C6E0009F311 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A3FB2F6CC71B8110C0675197 /* Pods-Wujudtest.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -449,8 +568,8 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 15.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = wujud.Wujudtest;
@@ -467,6 +586,7 @@
 		};
 		6AA6F0FB2D416C6E0009F311 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0D3BF0F040500E509F876AC8 /* Pods-Wujudtest.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -489,8 +609,8 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "\"$(inherited) @executable_path/Frameworks\"";
 				MACOSX_DEPLOYMENT_TARGET = 15.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = wujud.Wujudtest;
@@ -507,6 +627,7 @@
 		};
 		6AA6F0FD2D416C6E0009F311 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 09C6DEC8EC31414E1B16F2D5 /* Pods-WujudtestTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -530,6 +651,7 @@
 		};
 		6AA6F0FE2D416C6E0009F311 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 687906082EF219745C2A7915 /* Pods-WujudtestTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -553,6 +675,7 @@
 		};
 		6AA6F1002D416C6E0009F311 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 42D44359B3F0B38C7D975376 /* Pods-WujudtestUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -575,6 +698,7 @@
 		};
 		6AA6F1012D416C6E0009F311 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C43CE504AEF1F82AF988965E /* Pods-WujudtestUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
