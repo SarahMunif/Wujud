@@ -8,16 +8,14 @@
 import SwiftUI
 
 struct AdminHomeView: View {
-    var firstName: String
-    var lastName: String
 
     var body: some View {
-        Text("Hello \(firstName) \(lastName), welcome to the admin panel!")
+        Text("Hello , welcome to the admin panel!")
             .font(.largeTitle)
             .padding()
     }
 }
 
 #Preview {
-    AdminHomeView(firstName: "Admin", lastName: "User")
+    AdminHomeView()
 }

@@ -98,7 +98,7 @@ struct SigninView: View {
                 .navigationTitle("Sign in")
                 .navigationDestination(isPresented: $viewModel.isSignedIn) {
                     if viewModel.isAdmin {
-                        AdminHomeView(firstName: viewModel.firstName, lastName: viewModel.lastName) // Pass names here
+                        AdminHomeView() // Pass names here
                     } else {
                         HomeView() // Navigate to HomeView if regular user
                     }
