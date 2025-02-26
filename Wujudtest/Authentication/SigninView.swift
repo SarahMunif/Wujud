@@ -11,14 +11,16 @@ final class SigninViewModel: ObservableObject {
     @Published var firstName = ""
     @Published var lastName = ""
     @Published var errorMessage: String?
+    @Published var isLoading = false
     
     func signIn() {
         guard !email.isEmpty, !password.isEmpty else {
             errorMessage = "Please enter your email and password."
             return
         }
-        
+        isLoading = true  // Indicate loading state
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] (authResult, error) in
+            defer { self?.isLoading = false }  // Reset loading state
             if let error = error as NSError? {
                 switch AuthErrorCode(rawValue: error.code) {
 

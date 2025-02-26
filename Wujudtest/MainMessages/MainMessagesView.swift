@@ -7,11 +7,67 @@
 
 import SwiftUI
 
+class MainMessagesViewModel: ObservableObject{
+    
+    @Published var errorMessage = ""
+    
+    
+    init(){
+        fetchCurrentUser()
+    }
+    
+    private func fetchCurrentUser(){
+
+        guard let uid =
+        AuthenticationManger.shared.auth.currentUser?.uid
+        else{
+            self.errorMessage = "could not find firebase uid "
+            return}
+        AdminManger.shared.firestore.collection("admins").document(uid).getDocument { snapshot, error in
+            if let error = error {
+                self.errorMessage = "Faild to fetch \(error)"
+                print("Faild to fetch ", error)
+                return
+            }
+            
+            self.errorMessage = "123"
+            
+            guard let data = snapshot?.data() else{
+                self.errorMessage = "No data found"
+                return
+            }
+//            print(data)
+            self.errorMessage = "Data : \(data.description)"
+
+        }
+    }
+}
+
+
+
 struct MainMessagesView: View {
     @State var shouldShowLogOutOptions = false
     
+    @ObservedObject private var vm = MainMessagesViewModel()
+    var body: some View {
+        NavigationView {
+            // nav bar
+            VStack{
+                Text("Current user id : \(vm.errorMessage)")
+                customNavBar
+                messagesView
+           }
+            .overlay(
+ 
+                newMessageButton, alignment: .bottom)
+            .navigationBarHidden(true)
+            }
+    }
+
+    
     private var customNavBar: some View {
         HStack{
+            
             VStack(alignment: .leading, spacing: 4){
                 Text("Username")
                     .font(.system(size: 24, weight: .bold))
@@ -47,19 +103,6 @@ struct MainMessagesView: View {
             ])
     
         }
-    }
-    var body: some View {
-        NavigationView {
-            // nav bar
-            VStack{
-                customNavBar
-                messagesView
-           }
-            .overlay(
- 
-                newMessageButton, alignment: .bottom)
-            .navigationBarHidden(true)
-            }
     }
     private var messagesView : some View {
         ScrollView {

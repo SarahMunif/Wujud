@@ -1,19 +1,20 @@
 import Foundation
 import FirebaseAuth
 
-enum AuthError: Error {  //It represents authentication errors
-    case missingEmail //It no email enterd
+enum AuthError: Error {
+    case missingEmail
+    case noCurrentUser
 }
 
 struct AuthDataResultModel {
-    let uid: String // let is constant means values cannot be changed after initialization
+    let uid: String
     let email: String
     
-    init(user: User) throws { // initializer method for the struct
+    init(user: User) throws {
         self.uid = user.uid
         
         guard let email = user.email else {
-            throw AuthError.missingEmail //when email is nil
+            throw AuthError.missingEmail
         }
         
         self.email = email
@@ -22,10 +23,12 @@ struct AuthDataResultModel {
 
 final class AuthenticationManger {
     static let shared = AuthenticationManger()
+    let auth = Auth.auth() // Exposing Firebase Auth to be used elsewhere
+
     private init() {}
-    
-    func createUser(email: String, password: String) async throws -> AuthDataResultModel {   //async allows to perform tasks that might take time(network)
-        let authDataResult = try await Auth.auth().createUser(withEmail: email, password: password)
+
+    func createUser(email: String, password: String) async throws -> AuthDataResultModel {
+        let authDataResult = try await auth.createUser(withEmail: email, password: password)
         return try AuthDataResultModel(user: authDataResult.user)
     }
 }

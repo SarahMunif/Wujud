@@ -10,6 +10,7 @@ import FirebaseFirestore
 
 class AdminManger {
     static let shared = AdminManger()
+    let firestore = Firestore.firestore()
 
     // Modify createNewUser to accept userId
     func createNewUser(userId: String, auth: AuthDataResultModel, firstName: String, lastName: String, phoneNumber: String, companyName: String, jobTitle: String, industry: String) async throws {
