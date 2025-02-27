@@ -7,14 +7,7 @@
 
 import SwiftUI
 
-struct ChatUser {
-    let uid, email, firstName, lastName: String
-    
-    var username: String {
-        guard let atIndex = email.firstIndex(of: "@") else { return email }
-        return String(email[..<atIndex])
-    }
-}
+
 class MainMessagesViewModel: ObservableObject{
     
     @Published var errorMessage = ""
@@ -30,10 +23,7 @@ class MainMessagesViewModel: ObservableObject{
         AuthenticationManger.shared.auth.currentUser?.uid == nil
         fetchCurrentUser()
     }
-
-    
      func fetchCurrentUser(){
-
         guard let uid =
         AuthenticationManger.shared.auth.currentUser?.uid
         else{
@@ -45,24 +35,13 @@ class MainMessagesViewModel: ObservableObject{
                 print("Faild to fetch ", error)
                 return
             }
-                        
             guard let data = snapshot?.data() else{
                 self.errorMessage = "No data found"
                 return
             }
 //            print(data)
 //            self.errorMessage = "Data : \(data.description)"
-            let uid = data["uid"] as? String ?? ""
-            let email = data["email"] as? String ?? ""
-            let firstName = data["firstName"] as? String ?? ""
-            let lastName = data["lastName"] as? String ?? ""
-
-            self.chatUser = ChatUser(uid: uid, email: email, firstName: firstName, lastName: lastName)
-            
-//            self.errorMessage = "user email \(chatUser.email)"
-//            print("UID: \(uid), Email: \(email), FirstName: \(firstName), LastName: \(lastName)")
-
-
+            self.chatUser = .init(data: data)
         }
     }
     
@@ -178,9 +157,12 @@ struct MainMessagesView: View {
         }
 
     }
+    
+    @State var shouldShowNewMessageScreen = false
+    
     private var newMessageButton: some View{
         Button {
-            
+            shouldShowNewMessageScreen.toggle()
         } label: {
             HStack{
                 Spacer()
@@ -194,9 +176,13 @@ struct MainMessagesView: View {
                 .cornerRadius(24)
                 .padding(.horizontal)
                 .shadow( radius: 15)
-            
+        }
+        .fullScreenCover(isPresented: $shouldShowNewMessageScreen) {
+            CreateNewMessageView()
         }
     }
+    
+    
 }
 
 #Preview {
