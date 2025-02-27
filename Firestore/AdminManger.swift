@@ -18,6 +18,8 @@ class AdminManger {
 
         // Create a dictionary with the user data
         let userData: [String: Any] = [
+            "uid": userId,  // Ensuring UID is also explicitly stored if needed
+            "email": auth.email,
             "firstName": firstName,
             "lastName": lastName,
             "phoneNumber": phoneNumber,

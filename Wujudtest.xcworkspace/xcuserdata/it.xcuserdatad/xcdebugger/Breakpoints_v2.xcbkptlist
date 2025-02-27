@@ -14,9 +14,9 @@
             filePath = "Wujudtest/MainMessages/MainMessagesView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
-            landmarkName = "customNavBar"
+            startingLineNumber = "149"
+            endingLineNumber = "149"
+            landmarkName = "messagesView"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>

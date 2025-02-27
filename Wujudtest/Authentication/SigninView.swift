@@ -4,6 +4,8 @@ import FirebaseFirestore
 
 @MainActor
 final class SigninViewModel: ObservableObject {
+    
+    
     @Published var email = ""
     @Published var password = ""
     @Published var isSignedIn = false
@@ -13,6 +15,8 @@ final class SigninViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var isLoading = false
     
+    var didCompleteLoginProcess: (() -> Void)?
+ 
     func signIn() {
         guard !email.isEmpty, !password.isEmpty else {
             errorMessage = "Please enter your email and password."
@@ -33,7 +37,9 @@ final class SigninViewModel: ObservableObject {
                 }
             } else {
                 print("✅ User signed in successfully")
+                self?.didCompleteLoginProcess?()
                 self?.checkUserRole()
+                
             }
         }
     }
@@ -60,6 +66,9 @@ final class SigninViewModel: ObservableObject {
     }
 }
 struct SigninView: View {
+    @State private var isLoginMode = false
+    let didCompleteLoginProcess: () -> Void
+
     @StateObject private var viewModel = SigninViewModel()
 
     var body: some View {
@@ -98,11 +107,14 @@ struct SigninView: View {
                 .padding()
                 .scrollDismissesKeyboard(.interactively)
                 .navigationTitle("Sign in")
+                .onAppear {
+                    viewModel.didCompleteLoginProcess = didCompleteLoginProcess
+                }
                 .navigationDestination(isPresented: $viewModel.isSignedIn) {
                     if viewModel.isAdmin {
-                        AdminHomeView() // Pass names here
+                        MainMessagesView() // Pass names here
                     } else {
-                        HomeView() // Navigate to HomeView if regular user
+                        MainMessagesView() // Navigate to HomeView if regular user
                     }
                 }
             }

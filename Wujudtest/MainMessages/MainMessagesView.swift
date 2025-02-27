@@ -7,16 +7,32 @@
 
 import SwiftUI
 
+struct ChatUser {
+    let uid, email, firstName, lastName: String
+    
+    var username: String {
+        guard let atIndex = email.firstIndex(of: "@") else { return email }
+        return String(email[..<atIndex])
+    }
+}
 class MainMessagesViewModel: ObservableObject{
     
     @Published var errorMessage = ""
+    @Published var chatUser : ChatUser?
     
     
     init(){
+//        DispatchQueue.main.async {
+//            self.isUserCurrentlyLoggedOut = true
+//            AuthenticationManger.shared.auth.currentUser?.uid == nil
+//            
+//        }
+        AuthenticationManger.shared.auth.currentUser?.uid == nil
         fetchCurrentUser()
     }
+
     
-    private func fetchCurrentUser(){
+     func fetchCurrentUser(){
 
         guard let uid =
         AuthenticationManger.shared.auth.currentUser?.uid
@@ -29,18 +45,38 @@ class MainMessagesViewModel: ObservableObject{
                 print("Faild to fetch ", error)
                 return
             }
-            
-            self.errorMessage = "123"
-            
+                        
             guard let data = snapshot?.data() else{
                 self.errorMessage = "No data found"
                 return
             }
 //            print(data)
-            self.errorMessage = "Data : \(data.description)"
+//            self.errorMessage = "Data : \(data.description)"
+            let uid = data["uid"] as? String ?? ""
+            let email = data["email"] as? String ?? ""
+            let firstName = data["firstName"] as? String ?? ""
+            let lastName = data["lastName"] as? String ?? ""
+
+            self.chatUser = ChatUser(uid: uid, email: email, firstName: firstName, lastName: lastName)
+            
+//            self.errorMessage = "user email \(chatUser.email)"
+//            print("UID: \(uid), Email: \(email), FirstName: \(firstName), LastName: \(lastName)")
+
 
         }
     }
+    
+    @Published var isUserCurrentlyLoggedOut = false
+    
+    func handelSignOut() {
+        do {
+            try AuthenticationManger.shared.auth.signOut()
+            isUserCurrentlyLoggedOut = true
+        } catch let signOutError {
+            print("Failed to sign out: \(signOutError)")
+        }
+    }
+
 }
 
 
@@ -53,7 +89,6 @@ struct MainMessagesView: View {
         NavigationView {
             // nav bar
             VStack{
-                Text("Current user id : \(vm.errorMessage)")
                 customNavBar
                 messagesView
            }
@@ -69,7 +104,7 @@ struct MainMessagesView: View {
         HStack{
             
             VStack(alignment: .leading, spacing: 4){
-                Text("Username")
+                Text("\(vm.chatUser?.username ?? "")")
                     .font(.system(size: 24, weight: .bold))
                 HStack{
                     Circle()
@@ -98,10 +133,17 @@ struct MainMessagesView: View {
             .init(title: Text("settings"), message: Text("what do you want to do "), buttons: [
                 .destructive(Text("Sign out"), action: {
                     print("handel sign out")
+                    vm.handelSignOut()
                 }),
                 .cancel()
             ])
     
+        }
+        .fullScreenCover(isPresented: $vm.isUserCurrentlyLoggedOut, onDismiss: nil) {
+            SigninView(didCompleteLoginProcess:{
+                self.vm.isUserCurrentlyLoggedOut = false
+                self.vm.fetchCurrentUser()
+            })
         }
     }
     private var messagesView : some View {

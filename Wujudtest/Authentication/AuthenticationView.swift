@@ -29,7 +29,9 @@ struct AuthenticationView: View {
             }
 
             NavigationLink {
-                SigninView()
+                SigninView(didCompleteLoginProcess: {
+                    
+                })
             } label: {
                 Text("Have an account? Sign in")
                     .font(.headline)

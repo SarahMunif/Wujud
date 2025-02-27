@@ -4,6 +4,7 @@ import FirebaseAuth
 enum AuthError: Error {
     case missingEmail
     case noCurrentUser
+    case signOutFailed
 }
 
 struct AuthDataResultModel {
@@ -30,5 +31,12 @@ final class AuthenticationManger {
     func createUser(email: String, password: String) async throws -> AuthDataResultModel {
         let authDataResult = try await auth.createUser(withEmail: email, password: password)
         return try AuthDataResultModel(user: authDataResult.user)
+    }
+    func signOut() throws {
+        do {
+            try auth.signOut()
+        } catch {
+            throw AuthError.signOutFailed // Throw a custom error if sign-out fails
+        }
     }
 }
