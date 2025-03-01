@@ -1,5 +1,6 @@
 import Foundation
 import FirebaseAuth
+import FirebaseFirestore
 
 enum AuthError: Error {
     case missingEmail
@@ -24,6 +25,7 @@ struct AuthDataResultModel {
 
 final class AuthenticationManger {
     static let shared = AuthenticationManger()
+    let firestore = Firestore.firestore()
     let auth = Auth.auth() // Exposing Firebase Auth to be used elsewhere
 
     private init() {}

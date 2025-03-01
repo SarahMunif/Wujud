@@ -40,6 +40,8 @@ class CreateNewMessageViewModel: ObservableObject {
     
 struct CreateNewMessageView: View {
     
+    let didSelectNewUser: (ChatUser) -> ()
+    
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var vm = CreateNewMessageViewModel()
     
@@ -50,18 +52,14 @@ struct CreateNewMessageView: View {
                 ForEach(vm.users) { user in
                     Button {
                         presentationMode.wrappedValue.dismiss()
+                        didSelectNewUser(user)
                     } label: {
                         HStack{
                             
                             Image(systemName: "person.fill")
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 55, height: 55)
-                                .clipped()
-                                .cornerRadius(50)
-                                .overlay(RoundedRectangle(cornerRadius: 50.0)
-                                    .stroke(Color(.label),
-                                        lineWidth: 2)
+                                .font(.system(size: 32))
+                                .padding()
+                                .overlay(RoundedRectangle(cornerRadius: 44).stroke(Color.black, lineWidth:1)
                                 )
                             Text(user.firstName)
                                 .foregroundColor(Color(.label))
@@ -92,5 +90,5 @@ struct CreateNewMessageView: View {
 }
 
 #Preview {
-    CreateNewMessageView()
+    MainMessagesView()
 }
