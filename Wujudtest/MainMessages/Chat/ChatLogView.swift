@@ -9,10 +9,35 @@ import SwiftUI
 
 import Firebase
 
+
+struct FirebaseConstants{
+    static let fromId = "fromId"
+    static let toId = "toId"
+    static let text = "text"
+}
+
+struct ChatMessage : Identifiable{ //Identifiable so it can be iterated over
+    
+    var id: String { documentId } // an id sicne it is Identifiable
+    
+    let documentId: String
+    let fromId, toId, text : String
+    
+    init(documentId: String, data: [String: Any]){
+        self.fromId = data[FirebaseConstants.fromId] as? String ?? ""
+        self.toId = data[FirebaseConstants.toId] as? String ?? ""
+        self.text = data[FirebaseConstants.text] as? String ?? ""
+        self.documentId = documentId
+    }
+    
+}
+
+
 class ChatLogViewModel: ObservableObject{
     
     @Published var chatText = ""
     @Published var errorMessage = ""
+    @Published var chatMessages = [ChatMessage]()
     
     let chatUser: ChatUser?
     
@@ -20,7 +45,41 @@ class ChatLogViewModel: ObservableObject{
         
         self.chatUser = chatUser
         
+        fetchMessages()
+        
     }
+    
+    private func fetchMessages(){
+        guard let fromId = AuthenticationManger.shared.auth.currentUser?.uid else{ return }
+        print("fromId: \(fromId)")
+        
+        guard let toId = chatUser?.uid else{ return }
+        
+         
+        AdminManger.shared.firestore
+            .collection("messages")
+            .document(fromId)
+            .collection(toId)
+            .order(by: "timestamp")
+            .addSnapshotListener { querySnapshot, error in
+                if let error = error {
+                    self.errorMessage = "failed to listion : \(error)"
+                    print (error)
+                    return
+                    
+                }
+                
+                querySnapshot?.documentChanges.forEach({ change in
+                    if change.type == .added{
+                       let data = change.document.data()
+                        self.chatMessages.append(.init(documentId: change.document.documentID, data: data))
+                    }
+                }) // to preent showing dublicated messags
+        
+            }
+        
+    }
+    
     func handelSend(){
         print(chatText)
         guard let fromId = AuthenticationManger.shared.auth.currentUser?.uid else{ return }
@@ -35,7 +94,7 @@ class ChatLogViewModel: ObservableObject{
             .collection(toId)
             .document()
         
-        let messageData = ["fromId": fromId, "toId": toId, "text": self.chatText, "timestamp": Timestamp()] as [String : Any]
+        let messageData = [FirebaseConstants.fromId: fromId, FirebaseConstants.toId: toId, FirebaseConstants.text: self.chatText, "timestamp": Timestamp()] as [String : Any]
         
         document.setData(messageData) { error in
             if let error = error {
@@ -43,7 +102,28 @@ class ChatLogViewModel: ObservableObject{
                 self.errorMessage = "Failed to save message into firebase \(error)"
                 return
             }
+            print("successfuly saved current user sending message")
+            self.chatText = ""
+
         }
+        
+        let recipientMessageDocument =
+        AdminManger.shared.firestore.collection("messages")
+            .document(toId)
+            .collection(fromId)
+            .document()
+        
+        recipientMessageDocument.setData(messageData) { error in
+            if let error = error {
+                print(error)
+                self.errorMessage = "Failed to save message into firebase \(error)"
+                return
+            }
+            
+            print("Recipient saved message as well")
+
+        }
+
         
     }
 }
@@ -77,20 +157,42 @@ struct ChatLogView: View{
         
             ScrollView{
                 
-                ForEach(0..<10) { num in
-                    HStack{
-                        Spacer()
-                        HStack{
-                            Text("fake message")
-                                .foregroundColor(.white)
+                ForEach(vm.chatMessages) { message in
+                    
+                    VStack{
+                        if message.fromId == AuthenticationManger.shared.auth.currentUser?.uid {
+                            HStack{
+                                Spacer()
+                                HStack{
+                                    Text(message.text)
+                                        .foregroundColor(.white)
+
+                                }
+                                .padding()
+                                .background(Color.blue)
+                                .cornerRadius(15)
+                            }
 
                         }
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(15)
+                        else {
+                            HStack{
+                                HStack{
+                                    Text(message.text)
+                                        .foregroundColor(.black  )
+
+                                }
+                                .padding()
+                                .background(Color.white)
+                                .cornerRadius(15)
+                                Spacer()
+                            }
+                        }
+                        
                     }
                     .padding(.horizontal)
                     .padding(.top, 8)
+
+
                 }
                 HStack{ Spacer()}
             }
