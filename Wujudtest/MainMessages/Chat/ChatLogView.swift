@@ -31,8 +31,7 @@ struct ChatMessage : Identifiable{ //Identifiable so it can be iterated over
     }
     
 }
-
-
+/// /// //// /////////// ////////////////
 class ChatLogViewModel: ObservableObject{
     
     @Published var chatText = ""
@@ -55,7 +54,7 @@ class ChatLogViewModel: ObservableObject{
         
         guard let toId = chatUser?.uid else{ return }
         
-         
+        
         AdminManger.shared.firestore
             .collection("messages")
             .document(fromId)
@@ -71,13 +70,16 @@ class ChatLogViewModel: ObservableObject{
                 
                 querySnapshot?.documentChanges.forEach({ change in
                     if change.type == .added{
-                       let data = change.document.data()
+                        let data = change.document.data()
                         self.chatMessages.append(.init(documentId: change.document.documentID, data: data))
                     }
-                }) // to preent showing dublicated messags
-        
+                }) // to prevent showing dublicated messags
+                
+                DispatchQueue.main.async {
+                    self.count += 1
+                    
+                }
             }
-        
     }
     
     func handelSend(){
@@ -87,7 +89,7 @@ class ChatLogViewModel: ObservableObject{
         
         guard let toId = chatUser?.uid else{ return }
         print("toId: \(toId)")
-
+        
         let document =
         AdminManger.shared.firestore.collection("messages")
             .document(fromId)
@@ -103,8 +105,12 @@ class ChatLogViewModel: ObservableObject{
                 return
             }
             print("successfuly saved current user sending message")
-            self.chatText = ""
+          
+            self.persistRecentMessage()
 
+            self.chatText = ""
+            self.count += 1
+            
         }
         
         let recipientMessageDocument =
@@ -121,11 +127,68 @@ class ChatLogViewModel: ObservableObject{
             }
             
             print("Recipient saved message as well")
-
+            
         }
-
+        
         
     }
+    
+    private func persistRecentMessage(){
+        guard let chatUser = chatUser else { return }
+        guard let uid = AuthenticationManger.shared.auth.currentUser?.uid else{
+            return
+        }
+        guard let toId = self.chatUser?.uid else { return }
+        
+       let document =  AdminManger.shared.firestore.collection("recent_messages")
+            .document(uid).collection("messages").document(toId)
+        
+        let data = [
+            "timestamp": Timestamp(),
+            "text": self.chatText,
+            "fromId" : uid,
+            "toId": toId,
+            "firstName": chatUser.firstName ,
+            "lastName": chatUser.lastName,
+           "username": chatUser.username,
+            
+        ] as [String : Any]
+        
+        //need to save another very similer for recpient
+        
+        document.setData(data) { error in
+            if let error = error {
+                self.errorMessage = "failed to save recent message: \(error)"
+                print("failed to save recent message: \(error)")
+                return
+            }
+        }
+//        guard let currentUser = AuthenticationManger.shared.currentUser else { return }
+//        let recipientRecentMessageDictionary = [
+//            FirebaseConstants.timestamp: Timestamp(),
+//            FirebaseConstants.text: self.chatText,
+//            FirebaseConstants.fromId: uid,
+//            FirebaseConstants.toId: toId,
+//            FirebaseConstants.profileImageUrl: currentUser.profileImageUrl,
+//            FirebaseConstants.email: currentUser.email
+//        ] as [String : Any]
+//        
+//        FirebaseManager.shared.firestore
+//            .collection(FirebaseConstants.recentMessages)
+//            .document(toId)
+//            .collection(FirebaseConstants.messages)
+//            .document(currentUser.uid)
+//            .setData(recipientRecentMessageDictionary) { error in
+//                if let error = error {
+//                    print("Failed to save recipient recent message: \(error)")
+//                    return
+//                }
+//            }
+        
+        
+    }
+    
+    @Published var count = 0
 }
 
 
@@ -151,50 +214,37 @@ struct ChatLogView: View{
 
         .navigationTitle(chatUser?.username ?? "")
             .navigationBarTitleDisplayMode(.inline)
+//            .navigationBarItems(trailing: Button(action: {
+//                vm.count += 1
+//                
+//            }, label: {
+//                Text("count: \(vm.count)")
+//            }))
     }
+    
+    static let emptyScollToString = "Empty"
     
     private var messgesView: some View{
         
             ScrollView{
-                
-                ForEach(vm.chatMessages) { message in
-                    
+                ScrollViewReader{ ScrollViewProxy in
                     VStack{
-                        if message.fromId == AuthenticationManger.shared.auth.currentUser?.uid {
-                            HStack{
-                                Spacer()
-                                HStack{
-                                    Text(message.text)
-                                        .foregroundColor(.white)
-
-                                }
-                                .padding()
-                                .background(Color.blue)
-                                .cornerRadius(15)
-                            }
+                        ForEach(vm.chatMessages) { message in
+                            MessageView(message: message)
 
                         }
-                        else {
-                            HStack{
-                                HStack{
-                                    Text(message.text)
-                                        .foregroundColor(.black  )
-
-                                }
-                                .padding()
-                                .background(Color.white)
-                                .cornerRadius(15)
-                                Spacer()
-                            }
-                        }
-                        
+                        HStack{ Spacer()}
+                            .id(ChatLogView.emptyScollToString)
                     }
-                    .padding(.horizontal)
-                    .padding(.top, 8)
+                    .onReceive(vm.$count) { _ in
+                        withAnimation(.easeOut(duration: 0.5)) {
+                            ScrollViewProxy.scrollTo(ChatLogView.emptyScollToString, anchor: .bottom)
 
-
+                        }
+                    }
+                
                 }
-                HStack{ Spacer()}
+ 
             }
             .background(Color(.init(white: 0.95, alpha: 1)))
     }
@@ -224,6 +274,47 @@ struct ChatLogView: View{
         .padding(.vertical,8)
     }
 }
+
+struct MessageView: View{
+    
+    let message : ChatMessage
+    
+    var body: some View {
+        VStack{
+            if message.fromId == AuthenticationManger.shared.auth.currentUser?.uid {
+                HStack{
+                    Spacer()
+                    HStack{
+                        Text(message.text)
+                            .foregroundColor(.white)
+
+                    }
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(15)
+                }
+
+            }
+            else {
+                HStack{
+                    HStack{
+                        Text(message.text)
+                            .foregroundColor(.black  )
+
+                    }
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(15)
+                    Spacer()
+                }
+            }
+            
+        }
+        .padding(.horizontal)
+        .padding(.top, 8)
+    }
+}
+
 #Preview {
     NavigationView {
         ChatLogView(chatUser: .init(data: ["uid" : "uAjk0j6s6nRBBC15WXz2C9whom73", "email" : "sadaia@gmail.om"]))

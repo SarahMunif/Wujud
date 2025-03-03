@@ -6,6 +6,31 @@
 //
 
 import SwiftUI
+import Firebase
+
+
+struct RecentMessage: Identifiable {
+    
+    var id : String { documentId }
+    
+    let documentId: String
+    let text, fromId, toId: String
+    let firstName, lastName, username: String
+    let timestamp: Timestamp
+    
+    init(documentId: String, data: [String: Any]) {
+        self.documentId = documentId
+        self.text = data["text"] as? String ?? ""
+        self.fromId = data["fromId"] as? String ?? ""
+        self.toId = data["toId"] as? String ?? ""
+        self.firstName = data["firstName"] as? String ?? ""
+        self.lastName = data["lastName"] as? String ?? ""
+        self.username = data["username"] as? String ?? ""
+        self.timestamp = data["timestamp"] as? Timestamp ?? Timestamp(date: Date())
+    }
+    
+}
+
 
 
 class MainMessagesViewModel: ObservableObject{
@@ -22,7 +47,40 @@ class MainMessagesViewModel: ObservableObject{
 //        }
         AuthenticationManger.shared.auth.currentUser?.uid == nil
         fetchCurrentUser()
+        
+        fetchRecentMessage()
     }
+    @Published var recentMessages = [RecentMessage]()
+    
+    
+    private func fetchRecentMessage() {
+        guard let uid = AuthenticationManger.shared.auth.currentUser?.uid
+        else{return}
+        
+        AdminManger.shared.firestore.collection("recent_messages").document(uid).collection("messages").addSnapshotListener { querySnapshot,error in
+            if let error = error {
+                self.errorMessage = "failed to listen for recent message :\(error)"
+                print(error)
+                return
+            }
+            
+            querySnapshot?.documentChanges.forEach({ change in
+                let docId = change.document.documentID
+                
+                if let index = self.recentMessages.firstIndex(where: { rm in
+                    return rm.documentId == docId
+                }){
+                    self.recentMessages.remove(at: index)
+
+                }
+                self.recentMessages.insert(.init(documentId: docId, data: change.document.data()),at: 0)
+                
+            })
+        }
+        
+    }
+    
+    
      func fetchCurrentUser(){
         guard let uid =
         AuthenticationManger.shared.auth.currentUser?.uid
@@ -136,7 +194,7 @@ struct MainMessagesView: View {
     }
     private var messagesView : some View {
         ScrollView {
-            ForEach(0..<10, id: \.self){num in
+            ForEach(vm.recentMessages){ recentMessage in
                 VStack{
                     NavigationLink {
                         Text("destenation")
@@ -147,9 +205,12 @@ struct MainMessagesView: View {
                                 .padding()
                                 .overlay(RoundedRectangle(cornerRadius: 44).stroke(Color.black, lineWidth:1)
                                 )
-                            VStack(alignment: .leading){
-                                Text("Username")
-                                Text("Message sent to user")
+                            VStack(alignment: .leading, spacing: 8){
+                                Text(recentMessage.firstName)
+                                    .font(.system(size: 12))
+                                    .foregroundColor(Color(.label))
+
+                                Text(recentMessage.text)
                                     .font(.system(size: 12))
                                     .foregroundColor(Color(.lightGray))
                                 
