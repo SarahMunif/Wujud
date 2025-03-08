@@ -13,6 +13,19 @@ class AdminManger {
     let firestore = Firestore.firestore()
     var currentUser: ChatUser?
 
+    func fetchCurrentUser() {
+        guard let uid = AuthenticationManger.shared.auth.currentUser?.uid else { return }
+        firestore.collection("admins").document(uid).getDocument { snapshot, error in
+            if let error = error {
+                print("Failed to fetch current user: \(error)")
+                return
+            }
+            guard let data = snapshot?.data() else { return }
+            self.currentUser = ChatUser(data: data)
+            print("Current user is now \(self.currentUser?.firstName ?? "nil")")
+        }
+    }
+
     // Modify createNewUser to accept userId
     func createNewUser(userId: String, auth: AuthDataResultModel, firstName: String, lastName: String, phoneNumber: String, companyName: String, jobTitle: String, industry: String) async throws {
         let db = Firestore.firestore()

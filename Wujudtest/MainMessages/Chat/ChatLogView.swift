@@ -14,6 +14,9 @@ struct FirebaseConstants{
     static let fromId = "fromId"
     static let toId = "toId"
     static let text = "text"
+    static let email = "email"
+    static let uid = "uid"
+    
 }
 
 struct ChatMessage : Identifiable{ //Identifiable so it can be iterated over
@@ -21,12 +24,14 @@ struct ChatMessage : Identifiable{ //Identifiable so it can be iterated over
     var id: String { documentId } // an id sicne it is Identifiable
     
     let documentId: String
-    let fromId, toId, text : String
+    let fromId, toId, text , email , uid: String
     
     init(documentId: String, data: [String: Any]){
         self.fromId = data[FirebaseConstants.fromId] as? String ?? ""
         self.toId = data[FirebaseConstants.toId] as? String ?? ""
         self.text = data[FirebaseConstants.text] as? String ?? ""
+        self.email = data[FirebaseConstants.email] as? String ?? ""
+        self.uid = data[FirebaseConstants.uid] as? String ?? ""
         self.documentId = documentId
     }
     
@@ -38,8 +43,8 @@ class ChatLogViewModel: ObservableObject{
     @Published var errorMessage = ""
     @Published var chatMessages = [ChatMessage]()
     
-    let chatUser: ChatUser?
-    
+    @Published var chatUser: ChatUser?
+
     init(chatUser: ChatUser?){
         
         self.chatUser = chatUser
@@ -48,7 +53,7 @@ class ChatLogViewModel: ObservableObject{
         
     }
     
-    private func fetchMessages(){
+     func fetchMessages(){
         guard let fromId = AuthenticationManger.shared.auth.currentUser?.uid else{ return }
         print("fromId: \(fromId)")
         
@@ -133,23 +138,22 @@ class ChatLogViewModel: ObservableObject{
         
     }
     
-    private func persistRecentMessage() {
+  private func persistRecentMessage() {
         guard let chatUser = chatUser else { return }
         guard let uid = AuthenticationManger.shared.auth.currentUser?.uid else { return }
         let toId = chatUser.uid
 
-        // Data to save in sender's recent message
+        // Save recent message for the sender
         let senderData: [String: Any] = [
             "timestamp": Timestamp(),
             "text": self.chatText,
             "fromId": uid,
             "toId": toId,
-            "firstName": chatUser.firstName, // This is the first name of the recipient from chatUser
+            "firstName": chatUser.firstName, // Recipient's info for sender's record
             "lastName": chatUser.lastName,
             "username": chatUser.username
         ]
 
-        // Update the sender's recent message document
         AdminManger.shared.firestore.collection("recent_messages")
             .document(uid).collection("messages").document(toId)
             .setData(senderData) { error in
@@ -160,32 +164,39 @@ class ChatLogViewModel: ObservableObject{
                 }
             }
 
-        // Ensure currentUser is populated correctly
-        guard let currentUser = AdminManger.shared.currentUser else { return }
+        // Determine the current sender's details.
+        // Use the admin manager if available; otherwise, fall back to the user manager.
+        guard let currentSender = AdminManger.shared.currentUser ?? UserManger.shared.currentUser else {
+            print("No current user found in either manager")
+            return
+        }
 
-        // Data for the recipient's recent message
+        // Derive username from the authenticated user's email if needed.
+        let senderUsername = AuthenticationManger.shared.auth.currentUser?.email?.components(separatedBy: "@").first ?? ""
+
+        // Data for the recipient's recent message (using the sender's details)
         let recipientData: [String: Any] = [
             "timestamp": Timestamp(),
             "text": self.chatText,
             "fromId": uid,
             "toId": toId,
-            "firstName": currentUser.firstName, // Use the current user's first name
-            "lastName": currentUser.lastName,
-            "username": currentUser.username
+            "firstName": currentSender.firstName,
+            "lastName": currentSender.lastName,
+            "username": senderUsername
         ]
 
-        // Update the recipient's recent message document
         AdminManger.shared.firestore.collection("recent_messages")
             .document(toId).collection("messages").document(uid)
             .setData(recipientData) { error in
                 if let error = error {
+                    self.errorMessage = "Failed to save recipient recent message: \(error)"
                     print("Failed to save recipient recent message: \(error)")
                     return
                 }
             }
     }
 
-    
+
     @Published var count = 0
 }
 

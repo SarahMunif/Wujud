@@ -126,7 +126,8 @@ struct MainMessagesView: View {
     @State var shouldShowLogOutOptions = false
     
     @State var shouldNavigateToChatLogView = false
-    
+    private var chatLogViewModel = ChatLogViewModel(chatUser: nil)
+
     @ObservedObject private var vm = MainMessagesViewModel()
     var body: some View {
         NavigationView {
@@ -201,8 +202,14 @@ struct MainMessagesView: View {
         ScrollView {
             ForEach(vm.recentMessages){ recentMessage in
                 VStack{
-                    NavigationLink {
-                        Text("destenation")
+                    Button {
+                        let uid = AuthenticationManger.shared.auth.currentUser?.uid == recentMessage.fromId ? recentMessage.toId : recentMessage.fromId
+                        self.chatUser = .init(data: [FirebaseConstants.email: recentMessage.username, FirebaseConstants.uid: uid])
+                        
+                        self.chatLogViewModel.chatUser = self.chatUser
+                        self.chatLogViewModel.fetchMessages()
+
+                        self.shouldNavigateToChatLogView.toggle()
                     } label: {
                         HStack(spacing: 16){
                             Image(systemName: "person.fill")
@@ -211,7 +218,7 @@ struct MainMessagesView: View {
                                 .overlay(RoundedRectangle(cornerRadius: 44).stroke(Color.black, lineWidth:1)
                                 )
                             VStack(alignment: .leading, spacing: 8){
-                                Text(recentMessage.firstName)
+                                Text(recentMessage.username)
                                     .font(.system(size: 12))
                                     .foregroundColor(Color(.label))
 
