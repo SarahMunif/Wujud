@@ -21,4 +21,6 @@ struct ChatUser: Identifiable {
         self.firstName = data["firstName"] as? String ?? ""
         self.lastName = data["lastName"] as? String ?? ""
     }
+
+
 }

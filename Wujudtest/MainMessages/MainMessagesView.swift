@@ -51,13 +51,17 @@ class MainMessagesViewModel: ObservableObject{
         fetchRecentMessage()
     }
     @Published var recentMessages = [RecentMessage]()
+    private var firestoreListener: ListenerRegistration?
+
     
-    
-    private func fetchRecentMessage() {
+     func fetchRecentMessage() {
         guard let uid = AuthenticationManger.shared.auth.currentUser?.uid
         else{return}
-        
-        AdminManger.shared.firestore.collection("recent_messages").document(uid).collection("messages").addSnapshotListener { querySnapshot,error in
+                 
+         firestoreListener?.remove()
+         self.recentMessages.removeAll()
+         
+         firestoreListener =  AdminManger.shared.firestore.collection("recent_messages").document(uid).collection("messages").addSnapshotListener { querySnapshot,error in
             if let error = error {
                 self.errorMessage = "failed to listen for recent message :\(error)"
                 print(error)
@@ -189,6 +193,7 @@ struct MainMessagesView: View {
             SigninView(didCompleteLoginProcess:{
                 self.vm.isUserCurrentlyLoggedOut = false
                 self.vm.fetchCurrentUser()
+                self.vm.fetchRecentMessage()
             })
         }
     }
@@ -266,3 +271,4 @@ struct MainMessagesView: View {
 #Preview {
     MainMessagesView()
 }
+

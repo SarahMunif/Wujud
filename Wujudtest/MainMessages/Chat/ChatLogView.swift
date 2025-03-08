@@ -133,60 +133,58 @@ class ChatLogViewModel: ObservableObject{
         
     }
     
-    private func persistRecentMessage(){
+    private func persistRecentMessage() {
         guard let chatUser = chatUser else { return }
-        guard let uid = AuthenticationManger.shared.auth.currentUser?.uid else{
-            return
-        }
-        guard let toId = self.chatUser?.uid else { return }
-        
-       let document =  AdminManger.shared.firestore.collection("recent_messages")
-            .document(uid).collection("messages").document(toId)
-        
-        let data = [
+        guard let uid = AuthenticationManger.shared.auth.currentUser?.uid else { return }
+        let toId = chatUser.uid
+
+        // Data to save in sender's recent message
+        let senderData: [String: Any] = [
             "timestamp": Timestamp(),
             "text": self.chatText,
-            "fromId" : uid,
+            "fromId": uid,
             "toId": toId,
-            "firstName": chatUser.firstName ,
+            "firstName": chatUser.firstName, // This is the first name of the recipient from chatUser
             "lastName": chatUser.lastName,
-           "username": chatUser.username,
-            
-        ] as [String : Any]
-        
-        //need to save another very similer for recpient
-        
-        document.setData(data) { error in
-            if let error = error {
-                self.errorMessage = "failed to save recent message: \(error)"
-                print("failed to save recent message: \(error)")
-                return
+            "username": chatUser.username
+        ]
+
+        // Update the sender's recent message document
+        AdminManger.shared.firestore.collection("recent_messages")
+            .document(uid).collection("messages").document(toId)
+            .setData(senderData) { error in
+                if let error = error {
+                    self.errorMessage = "Failed to save recent message: \(error)"
+                    print("Failed to save recent message: \(error)")
+                    return
+                }
             }
-        }
-//        guard let currentUser = AuthenticationManger.shared.currentUser else { return }
-//        let recipientRecentMessageDictionary = [
-//            FirebaseConstants.timestamp: Timestamp(),
-//            FirebaseConstants.text: self.chatText,
-//            FirebaseConstants.fromId: uid,
-//            FirebaseConstants.toId: toId,
-//            FirebaseConstants.profileImageUrl: currentUser.profileImageUrl,
-//            FirebaseConstants.email: currentUser.email
-//        ] as [String : Any]
-//        
-//        FirebaseManager.shared.firestore
-//            .collection(FirebaseConstants.recentMessages)
-//            .document(toId)
-//            .collection(FirebaseConstants.messages)
-//            .document(currentUser.uid)
-//            .setData(recipientRecentMessageDictionary) { error in
-//                if let error = error {
-//                    print("Failed to save recipient recent message: \(error)")
-//                    return
-//                }
-//            }
-        
-        
+
+        // Ensure currentUser is populated correctly
+        guard let currentUser = AdminManger.shared.currentUser else { return }
+
+        // Data for the recipient's recent message
+        let recipientData: [String: Any] = [
+            "timestamp": Timestamp(),
+            "text": self.chatText,
+            "fromId": uid,
+            "toId": toId,
+            "firstName": currentUser.firstName, // Use the current user's first name
+            "lastName": currentUser.lastName,
+            "username": currentUser.username
+        ]
+
+        // Update the recipient's recent message document
+        AdminManger.shared.firestore.collection("recent_messages")
+            .document(toId).collection("messages").document(uid)
+            .setData(recipientData) { error in
+                if let error = error {
+                    print("Failed to save recipient recent message: \(error)")
+                    return
+                }
+            }
     }
+
     
     @Published var count = 0
 }
