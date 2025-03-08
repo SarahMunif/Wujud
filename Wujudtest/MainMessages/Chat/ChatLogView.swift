@@ -14,6 +14,9 @@ struct FirebaseConstants{
     static let fromId = "fromId"
     static let toId = "toId"
     static let text = "text"
+    static let email = "email"
+    static let uid = "uid"
+    
 }
 
 struct ChatMessage : Identifiable{ //Identifiable so it can be iterated over
@@ -21,12 +24,14 @@ struct ChatMessage : Identifiable{ //Identifiable so it can be iterated over
     var id: String { documentId } // an id sicne it is Identifiable
     
     let documentId: String
-    let fromId, toId, text : String
+    let fromId, toId, text , email , uid: String
     
     init(documentId: String, data: [String: Any]){
         self.fromId = data[FirebaseConstants.fromId] as? String ?? ""
         self.toId = data[FirebaseConstants.toId] as? String ?? ""
         self.text = data[FirebaseConstants.text] as? String ?? ""
+        self.email = data[FirebaseConstants.email] as? String ?? ""
+        self.uid = data[FirebaseConstants.uid] as? String ?? ""
         self.documentId = documentId
     }
     
@@ -38,8 +43,8 @@ class ChatLogViewModel: ObservableObject{
     @Published var errorMessage = ""
     @Published var chatMessages = [ChatMessage]()
     
-    let chatUser: ChatUser?
-    
+    @Published var chatUser: ChatUser?
+
     init(chatUser: ChatUser?){
         
         self.chatUser = chatUser
@@ -48,7 +53,7 @@ class ChatLogViewModel: ObservableObject{
         
     }
     
-    private func fetchMessages(){
+     func fetchMessages(){
         guard let fromId = AuthenticationManger.shared.auth.currentUser?.uid else{ return }
         print("fromId: \(fromId)")
         
@@ -133,76 +138,62 @@ class ChatLogViewModel: ObservableObject{
         
     }
     
-    
     private func persistRecentMessage() {
         guard let chatUser = chatUser else { return }
         guard let uid = AuthenticationManger.shared.auth.currentUser?.uid else { return }
-        guard let toId = self.chatUser?.uid else { return }
-        
+        let toId = chatUser.uid
+
         // Save recent message for the sender
-        let senderDocument = AdminManger.shared.firestore
-            .collection("recent_messages")
-            .document(uid)
-            .collection("messages")
-            .document(toId)
-        
-        let senderData = [
+        let senderData: [String: Any] = [
             "timestamp": Timestamp(),
-            "text": self.chatText,              // (Unchanged)
+            "text": self.chatText,
             "fromId": uid,
             "toId": toId,
-            "firstName": chatUser.firstName,    // Recipient's info for sender's record
+            "firstName": chatUser.firstName, // Recipient's info for sender's record
             "lastName": chatUser.lastName,
             "username": chatUser.username
-        ] as [String : Any]
-        
-        senderDocument.setData(senderData) { error in
-            if let error = error {
-                self.errorMessage = "failed to save recent message: \(error)"
-                print("failed to save recent message: \(error)")
-                return
+        ]
+
+        AdminManger.shared.firestore.collection("recent_messages")
+            .document(uid).collection("messages").document(toId)
+            .setData(senderData) { error in
+                if let error = error {
+                    self.errorMessage = "Failed to save recent message: \(error)"
+                    print("Failed to save recent message: \(error)")
+                    return
+                }
             }
-        }
-        
-        // Now for the recipient’s recent_messages,
-        // we replace the hard-coded "SenderFirstName" with the real current user's name.
-        guard let currentUserEmail = AuthenticationManger.shared.auth.currentUser?.email else { return }
-        guard let currentUser = AdminManger.shared.currentUser else {
-            // Make sure you’ve set AdminManger.shared.currentUser after login!
-            print("No currentUser found in AdminManger")
+
+        // Determine the current sender's details.
+        // Use the admin manager if available; otherwise, fall back to the user manager.
+        guard let currentSender = AdminManger.shared.currentUser ?? UserManger.shared.currentUser else {
+            print("No current user found in either manager")
             return
         }
-        
-        // You can keep deriving username from email if you prefer
-        let senderUsername = currentUserEmail.components(separatedBy: "@").first ?? currentUserEmail
-        
-        // Instead of "SenderFirstName"/"SenderLastName," use the actual sender’s names:
-        let senderFirstName = currentUser.firstName
-        let senderLastName = currentUser.lastName
-        
-        let recipientDocument = AdminManger.shared.firestore
-            .collection("recent_messages")
-            .document(toId)
-            .collection("messages")
-            .document(uid)
-        
-        let recipientData = [
+
+        // Derive username from the authenticated user's email if needed.
+        let senderUsername = AuthenticationManger.shared.auth.currentUser?.email?.components(separatedBy: "@").first ?? ""
+
+        // Data for the recipient's recent message (using the sender's details)
+        let recipientData: [String: Any] = [
             "timestamp": Timestamp(),
-            "text": self.chatText,          // (Unchanged)
+            "text": self.chatText,
             "fromId": uid,
             "toId": toId,
-            "firstName": senderFirstName,   // Actual current user's name
-            "lastName": senderLastName,
+            "firstName": currentSender.firstName,
+            "lastName": currentSender.lastName,
             "username": senderUsername
-        ] as [String : Any]
-        
-        recipientDocument.setData(recipientData) { error in
-            if let error = error {
-                self.errorMessage = "failed to save recipient recent message: \(error)"
-                print("failed to save recipient recent message: \(error)")
-                return
+        ]
+
+        AdminManger.shared.firestore.collection("recent_messages")
+            .document(toId).collection("messages").document(uid)
+            .setData(recipientData) { error in
+                if let error = error {
+                    self.errorMessage = "Failed to save recipient recent message: \(error)"
+                    print("Failed to save recipient recent message: \(error)")
+                    return
+                }
             }
-        }
     }
 
 

@@ -53,6 +53,8 @@ final class SigninViewModel: ObservableObject {
             if let error = error {
                 print("Error fetching user role: \(error)")
                 self?.isAdmin = false // Default to regular user if there's an error
+                // Fallback: fetch the regular user's data
+                UserManger.shared.fetchCurrentUser()
             } else {
                 if let data = document?.data() {
                     self?.isAdmin = true
@@ -60,6 +62,8 @@ final class SigninViewModel: ObservableObject {
                     self?.lastName = data["lastName"] as? String ?? ""
                 } else {
                     self?.isAdmin = false
+                    UserManger.shared.fetchCurrentUser()
+
                 }
             }
             self?.isSignedIn = true // Set signed-in status after role check
