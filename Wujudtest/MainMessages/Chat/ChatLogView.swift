@@ -133,61 +133,79 @@ class ChatLogViewModel: ObservableObject{
         
     }
     
-    private func persistRecentMessage(){
+    
+    private func persistRecentMessage() {
         guard let chatUser = chatUser else { return }
-        guard let uid = AuthenticationManger.shared.auth.currentUser?.uid else{
-            return
-        }
+        guard let uid = AuthenticationManger.shared.auth.currentUser?.uid else { return }
         guard let toId = self.chatUser?.uid else { return }
         
-       let document =  AdminManger.shared.firestore.collection("recent_messages")
-            .document(uid).collection("messages").document(toId)
+        // Save recent message for the sender
+        let senderDocument = AdminManger.shared.firestore
+            .collection("recent_messages")
+            .document(uid)
+            .collection("messages")
+            .document(toId)
         
-        let data = [
+        let senderData = [
             "timestamp": Timestamp(),
-            "text": self.chatText,
-            "fromId" : uid,
+            "text": self.chatText,              // (Unchanged)
+            "fromId": uid,
             "toId": toId,
-            "firstName": chatUser.firstName ,
+            "firstName": chatUser.firstName,    // Recipient's info for sender's record
             "lastName": chatUser.lastName,
-           "username": chatUser.username,
-            
+            "username": chatUser.username
         ] as [String : Any]
         
-        //need to save another very similer for recpient
-        
-        document.setData(data) { error in
+        senderDocument.setData(senderData) { error in
             if let error = error {
                 self.errorMessage = "failed to save recent message: \(error)"
                 print("failed to save recent message: \(error)")
                 return
             }
         }
-//        guard let currentUser = AuthenticationManger.shared.currentUser else { return }
-//        let recipientRecentMessageDictionary = [
-//            FirebaseConstants.timestamp: Timestamp(),
-//            FirebaseConstants.text: self.chatText,
-//            FirebaseConstants.fromId: uid,
-//            FirebaseConstants.toId: toId,
-//            FirebaseConstants.profileImageUrl: currentUser.profileImageUrl,
-//            FirebaseConstants.email: currentUser.email
-//        ] as [String : Any]
-//        
-//        FirebaseManager.shared.firestore
-//            .collection(FirebaseConstants.recentMessages)
-//            .document(toId)
-//            .collection(FirebaseConstants.messages)
-//            .document(currentUser.uid)
-//            .setData(recipientRecentMessageDictionary) { error in
-//                if let error = error {
-//                    print("Failed to save recipient recent message: \(error)")
-//                    return
-//                }
-//            }
         
+        // Now for the recipient’s recent_messages,
+        // we replace the hard-coded "SenderFirstName" with the real current user's name.
+        guard let currentUserEmail = AuthenticationManger.shared.auth.currentUser?.email else { return }
+        guard let currentUser = AdminManger.shared.currentUser else {
+            // Make sure you’ve set AdminManger.shared.currentUser after login!
+            print("No currentUser found in AdminManger")
+            return
+        }
         
+        // You can keep deriving username from email if you prefer
+        let senderUsername = currentUserEmail.components(separatedBy: "@").first ?? currentUserEmail
+        
+        // Instead of "SenderFirstName"/"SenderLastName," use the actual sender’s names:
+        let senderFirstName = currentUser.firstName
+        let senderLastName = currentUser.lastName
+        
+        let recipientDocument = AdminManger.shared.firestore
+            .collection("recent_messages")
+            .document(toId)
+            .collection("messages")
+            .document(uid)
+        
+        let recipientData = [
+            "timestamp": Timestamp(),
+            "text": self.chatText,          // (Unchanged)
+            "fromId": uid,
+            "toId": toId,
+            "firstName": senderFirstName,   // Actual current user's name
+            "lastName": senderLastName,
+            "username": senderUsername
+        ] as [String : Any]
+        
+        recipientDocument.setData(recipientData) { error in
+            if let error = error {
+                self.errorMessage = "failed to save recipient recent message: \(error)"
+                print("failed to save recipient recent message: \(error)")
+                return
+            }
+        }
     }
-    
+
+
     @Published var count = 0
 }
 

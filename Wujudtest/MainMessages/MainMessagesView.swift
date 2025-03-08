@@ -206,7 +206,7 @@ struct MainMessagesView: View {
                                 .overlay(RoundedRectangle(cornerRadius: 44).stroke(Color.black, lineWidth:1)
                                 )
                             VStack(alignment: .leading, spacing: 8){
-                                Text(recentMessage.firstName)
+                                Text(recentMessage.username)
                                     .font(.system(size: 12))
                                     .foregroundColor(Color(.label))
 

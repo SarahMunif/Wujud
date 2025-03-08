@@ -38,6 +38,7 @@ final class SigninViewModel: ObservableObject {
             } else {
                 print("✅ User signed in successfully")
                 self?.didCompleteLoginProcess?()
+                AdminManger.shared.fetchCurrentUser()
                 self?.checkUserRole()
                 
             }
