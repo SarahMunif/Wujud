@@ -26,18 +26,19 @@ final class SigninAdminViewModel: ObservableObject {
             }
         }
     }
+    
     func createNewUser(firstName: String, lastName: String, phoneNumber: String, companyName: String, jobTitle: String, industry: String) async {
         guard let user = user else {
             print("No authenticated user found")
             return
         }
         
-        let userId = Auth.auth().currentUser?.uid // Get the authenticated user's ID
+        let userId = Auth.auth().currentUser?.uid
         if let userId = userId {
             do {
-                let authData = try AuthDataResultModel(user: user) // Pass the actual User object
+                let authData = try AuthDataResultModel(user: user)
                 try await AdminManger.shared.createNewUser(
-                    userId: userId, // Pass userId to the method
+                    userId: userId,
                     auth: authData,
                     firstName: firstName,
                     lastName: lastName,
@@ -55,114 +56,244 @@ final class SigninAdminViewModel: ObservableObject {
         }
     }
 }
+
 struct SigninAdminView: View {
     @StateObject private var viewModel = SigninAdminViewModel()
 
     var body: some View {
         NavigationStack {
-            VStack {
-                TextField("Email ..", text: $viewModel.email)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(10)
-
-                SecureField("Password ..", text: $viewModel.password)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(10)
-
-                Button {
-                    viewModel.signIn()
-                } label: {
-                    Text("Save")
-                        .font(.headline)
-                        .foregroundStyle(.white)
-                        .frame(height: 55)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                        .cornerRadius(10)
+            ZStack {
+                // Gradient Background matching AuthenticationView
+//                LinearGradient(
+//                    gradient: Gradient(colors: [
+//                        Color(red: 0.40, green: 0.48, blue: 0.54), // Lighter teal-ish
+//                        Color(red: 0.01, green: 0.06, blue: 0.14)  // Darker color
+//                    ]),
+                LinearGradient(gradient: Gradient(colors: [
+                    Color(red: 0x0E / 255, green: 0x2A / 255, blue: 0x34 / 255),  // #0E2A34
+                    Color(red: 0x58 / 255, green: 0xC0 / 255, blue: 0x91 / 255),  // #58C091
+                    Color(red: 0x02 / 255, green: 0x10 / 255, blue: 0x24 / 255)   // #021024
+                ]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .edgesIgnoringSafeArea(.all)
+                
+                VStack(spacing: 10) {
+                    // Title aligned to left
+                    HStack {
+                        Text("Sign in as Admin")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                        Spacer()
+                    }
+                    .padding(.horizontal, 30)
+                    .padding(.top, 60)
+                    
+                    // Container for sign in fields
+                    VStack(spacing: 20) {
+                        TextField("Email ..", text: $viewModel.email)
+                            .padding()
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(10)
+                        
+                        SecureField("Password ..", text: $viewModel.password)
+                            .padding()
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(10)
+                        
+                        Button {
+                            viewModel.signIn()
+                        } label: {
+                            Text("Save")
+                                .font(.headline)
+                                .fontWeight(.regular)
+                                .foregroundColor(.white)
+                                .frame(height: 50)
+                                .frame(maxWidth: .infinity)
+                                .background(Color(red: 57/255, green: 120/255, blue: 101/255)) // #397865
+                                .cornerRadius(25)
+                        }
+                    }
+                    .padding(.vertical, 30)
+                    .padding(.horizontal, 20)
+                    .background(
+                        Color(red: 0.35, green: 0.45, blue: 0.55).opacity(0.3)
+                    )
+                    .cornerRadius(30)
+                    .padding(.horizontal, 40)
+                    
+                    Spacer()
                 }
             }
-            .padding()
-            .navigationTitle("Sign in")
+            .navigationTitle("")
             .navigationDestination(isPresented: $viewModel.isSignedIn) {
-                ExtraFieldView(viewModel: viewModel) // Pass the entire viewModel
+                // Navigate to the ExtraFieldView after sign in
+                ExtraFieldView(viewModel: viewModel)
             }
         }
     }
 }
+
 struct ExtraFieldView: View {
     @State private var firstName = ""
     @State private var lastName = ""
     @State private var phoneNumber = ""
+    
     @State private var companyName = ""
     @State private var jobTitle = ""
     @State private var industry = ""
     
-    @State private var isNavigating = false // State variable for navigation
+    @State private var isNavigating = false
+    @State private var isStep2 = false  // Controls form step
+    
     @ObservedObject var viewModel: SigninAdminViewModel
     
     var body: some View {
-        VStack {
-            TextField("First Name", text: $firstName)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
+        ZStack {
+            // Gradient Background
+            LinearGradient(gradient: Gradient(colors: [
+                Color(red: 0x0E / 255, green: 0x2A / 255, blue: 0x34 / 255),  // #0E2A34
+                Color(red: 0x58 / 255, green: 0xC0 / 255, blue: 0x91 / 255),  // #58C091
+                Color(red: 0x02 / 255, green: 0x10 / 255, blue: 0x24 / 255)   // #021024
+            ]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .edgesIgnoringSafeArea(.all)
             
-            TextField("Last Name", text: $lastName)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
-
-            TextField("Phone Number", text: $phoneNumber)
-                .keyboardType(.phonePad)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
-
-            TextField("Company Name", text: $companyName)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
-            
-            TextField("Job Title", text: $jobTitle)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
-            
-            TextField("Industry", text: $industry)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
-                .padding()
-            
-            Button {
-                Task {
-                    await viewModel.createNewUser(
-                        firstName: firstName,
-                        lastName: lastName,
-                        phoneNumber: phoneNumber,
-                        companyName: companyName,
-                        jobTitle: jobTitle,
-                        industry: industry
-                    )
-                    // Navigate to the next view after user creation
-                    isNavigating = true
+            VStack(spacing: 10) {
+                // Title (changes based on step)
+                HStack {
+                    Text(isStep2 ? "More Details" : "Extra Fields")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                    Spacer()
                 }
-            } label: {
-                Text("Submit")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(height: 55)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.green)
-                    .cornerRadius(10)
+                .padding(.horizontal, 30)
+                .padding(.top, 60)
+                
+                // Container
+                VStack(spacing: 20) {
+                    if !isStep2 {
+                        // Step 1: Basic Info
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("First Name *")
+                                .font(.subheadline)
+                                .foregroundColor(.white)
+                            TextField("", text: $firstName)
+                                .padding()
+                                .background(Color.gray.opacity(0.2))
+                                .cornerRadius(10)
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Last Name *")
+                                .font(.subheadline)
+                                .foregroundColor(.white)
+                            TextField("", text: $lastName)
+                                .padding()
+                                .background(Color.gray.opacity(0.2))
+                                .cornerRadius(10)
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Phone Number *")
+                                .font(.subheadline)
+                                .foregroundColor(.white)
+                            TextField("", text: $phoneNumber)
+                                .keyboardType(.phonePad)
+                                .padding()
+                                .background(Color.gray.opacity(0.2))
+                                .cornerRadius(10)
+                        }
+                        
+                        // Next Button
+                        Button {
+                            isStep2 = true
+                        } label: {
+                            Text("Next")
+                                .font(.headline)
+                                .fontWeight(.regular)
+                                .foregroundColor(.white)
+                                .frame(height: 50)
+                                .frame(maxWidth: .infinity)
+                                .background(Color(red: 57/255, green: 120/255, blue: 101/255)) // #397865
+                                .cornerRadius(25)
+                        }
+                    } else {
+                        // Step 2: Admin Details
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Company Name *")
+                                .font(.subheadline)
+                                .foregroundColor(.white)
+                            TextField("", text: $companyName)
+                                .padding()
+                                .background(Color.gray.opacity(0.2))
+                                .cornerRadius(10)
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Job Title *")
+                                .font(.subheadline)
+                                .foregroundColor(.white)
+                            TextField("", text: $jobTitle)
+                                .padding()
+                                .background(Color.gray.opacity(0.2))
+                                .cornerRadius(10)
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Industry *")
+                                .font(.subheadline)
+                                .foregroundColor(.white)
+                            TextField("", text: $industry)
+                                .padding()
+                                .background(Color.gray.opacity(0.2))
+                                .cornerRadius(10)
+                        }
+                        
+                        // Register Button
+                        Button {
+                            Task {
+                                await viewModel.createNewUser(
+                                    firstName: firstName,
+                                    lastName: lastName,
+                                    phoneNumber: phoneNumber,
+                                    companyName: companyName,
+                                    jobTitle: jobTitle,
+                                    industry: industry
+                                )
+                                isNavigating = true
+                            }
+                        } label: {
+                            Text("Register")
+                                .font(.headline)
+                                .fontWeight(.regular)
+                                .foregroundColor(.white)
+                                .frame(height: 50)
+                                .frame(maxWidth: .infinity)
+                                .background(Color(red: 57/255, green: 120/255, blue: 101/255)) // #397865
+                                .cornerRadius(25)
+                        }
+                    }
+                }
+                .padding(.vertical, 30)
+                .padding(.horizontal, 20)
+                .background(
+                    Color(red: 0.35, green: 0.45, blue: 0.55).opacity(0.3)
+                )
+                .cornerRadius(30)
+                .padding(.horizontal, 40)
+                
+                Spacer()
             }
         }
-        .padding()
-        .navigationTitle("Extra Fields")
+        .navigationTitle("")
         .navigationDestination(isPresented: $isNavigating) {
-            HomeView() // Navigate to HomeView when isNavigating becomes true
+            HomeView()
         }
     }
 }

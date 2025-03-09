@@ -28,8 +28,27 @@ struct RecentMessage: Identifiable {
         self.username = data["username"] as? String ?? ""
         self.timestamp = data["timestamp"] as? Timestamp ?? Timestamp(date: Date())
     }
-    
+    var timeAgo: String {
+        let date = timestamp.dateValue()
+        let secondsAgo = Int(Date().timeIntervalSince(date))
+        
+        let minute = 60
+        let hour = 60 * minute
+        let day = 24 * hour
+        
+        if secondsAgo < minute {
+            return "Just now"
+        } else if secondsAgo < hour {
+            return "\(secondsAgo / minute)m ago"
+        } else if secondsAgo < day {
+            return "\(secondsAgo / hour)h ago"
+        } else {
+            return "\(secondsAgo / day)d ago"
+        }
+    }
 }
+
+
 
 
 
@@ -228,7 +247,7 @@ struct MainMessagesView: View {
                                 
                             }
                             Spacer()
-                            Text("22")
+                            Text(recentMessage.timeAgo)
                                 .font(.system(size:14, weight:.semibold))
                         }
                     }
