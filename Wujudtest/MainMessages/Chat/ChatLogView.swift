@@ -55,7 +55,7 @@ class ChatLogViewModel: ObservableObject{
     
      func fetchMessages(){
         guard let fromId = AuthenticationManger.shared.auth.currentUser?.uid else{ return }
-        print("fromId: \(fromId)")
+//        print("fromId: \(fromId)")
         
         guard let toId = chatUser?.uid else{ return }
         
