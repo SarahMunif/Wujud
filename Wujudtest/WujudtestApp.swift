@@ -10,6 +10,7 @@ struct WujudtestApp: App {
         FirebaseApp.configure()
     }
     
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

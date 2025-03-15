@@ -201,9 +201,9 @@ struct SigninView: View {
         }
         .navigationDestination(isPresented: $viewModel.isSignedIn) {
             if viewModel.isAdmin {
-                AddBoothView()
+                AdminProfile()
             } else {
-                MainMessagesView()
+                UserProfileView()
             }
         }
     }

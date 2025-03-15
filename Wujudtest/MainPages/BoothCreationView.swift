@@ -7,7 +7,7 @@
 import SwiftUI
 import FirebaseAuth
 
-struct AddBoothView: View {
+struct BoothCreationView: View {
     @State private var companyName: String = ""
     @State private var description: String = ""
     @State private var industry: String = ""
@@ -69,13 +69,8 @@ struct AddBoothView: View {
     }
 }
 
-struct AddBoothView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddBoothView()
-    }
-}
 
 
 #Preview {
-    AddBoothView()
+    BoothCreationView()
 }
