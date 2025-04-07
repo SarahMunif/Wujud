@@ -17,16 +17,10 @@ struct BoothInfoView: View {
 
     var body: some View {
         ZStack {
-            // Background Gradient
-            LinearGradient(gradient: Gradient(colors: [
-                Color(red: 0x0E / 255, green: 0x2A / 255, blue: 0x34 / 255),
-                Color(red: 0x58 / 255, green: 0xC0 / 255, blue: 0x91 / 255),
-                Color(red: 0x02 / 255, green: 0x10 / 255, blue: 0x24 / 255)
-            ]),
-            startPoint: .top,
-            endPoint: .bottom)
+            LinearGradient(gradient: Gradient(colors: [Color.black, Color.green.opacity(0.4)]), startPoint: .top, endPoint: .bottom)
+            
             .edgesIgnoringSafeArea(.all)
-
+            
             ScrollView {
                 VStack {
                     if noBoothFound {

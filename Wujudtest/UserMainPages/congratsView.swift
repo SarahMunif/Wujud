@@ -7,19 +7,12 @@
 
 import SwiftUI
 
-struct CongratsView: View {
+struct congratsView: View {
     var body: some View {
         ZStack {
             // MARK: - Background Gradient
-            LinearGradient(gradient: Gradient(colors: [
-                Color(red: 0x0E / 255, green: 0x2A / 255, blue: 0x34 / 255),  // #0E2A34
-                Color(red: 0x58 / 255, green: 0xC0 / 255, blue: 0x91 / 255),  // #58C091
-                Color(red: 0x02 / 255, green: 0x10 / 255, blue: 0x24 / 255)   // #021024
-            ]),
-               
-                startPoint: .top,
-                endPoint: .bottom
-            )
+            LinearGradient(gradient: Gradient(colors: [Color.black, Color.green.opacity(0.4)]), startPoint: .top, endPoint: .bottom)
+            
             .edgesIgnoringSafeArea(.all)
             
             VStack(alignment: .leading) {
@@ -51,9 +44,10 @@ struct CongratsView: View {
                         .multilineTextAlignment(.center)
                     
                     // Continue Button
-                    Button {
-                        // Action for continuing (e.g., navigate to the home screen)
-                    } label: {
+                    NavigationLink{
+                        TutorialView()
+                    }
+                     label: {
                         Text("Continue")
                             .font(.headline)
                             .fontWeight(.regular)
@@ -78,5 +72,5 @@ struct CongratsView: View {
 }
 
 #Preview {
-    CongratsView()
+    congratsView()
 }

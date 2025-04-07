@@ -1,18 +1,18 @@
 //
-//  HomeView.swift
+//  UserHomePage.swift
 //  Wujudtest
 //
-//  Created by su on 15/03/2025.
+//  Created by su on 27/03/2025.
 //
 
 import SwiftUI
 
-struct HomeView: View {
+struct UserHomePage: View {
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }
 }
 
 #Preview {
-    HomeView()
+    UserHomePage()
 }

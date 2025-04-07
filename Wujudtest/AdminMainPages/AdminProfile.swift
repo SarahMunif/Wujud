@@ -9,6 +9,10 @@ import Firebase
 import FirebaseAuth
 
 struct AdminProfile: View {
+    
+    @State var shouldShowLogOutOptions = false
+    @ObservedObject private var vm = MainMessagesViewModel()
+    
     @State private var currentUser: [String: Any] = [:]
     @State private var errorMessage = ""
     @State private var showingLocation = false
@@ -18,24 +22,46 @@ struct AdminProfile: View {
     var body: some View {
         ZStack {
             // Background Gradient
-            LinearGradient(gradient: Gradient(colors: [
-                Color(red: 0x0E / 255, green: 0x2A / 255, blue: 0x34 / 255),
-                Color(red: 0x58 / 255, green: 0xC0 / 255, blue: 0x91 / 255),
-                Color(red: 0x02 / 255, green: 0x10 / 255, blue: 0x24 / 255)
-            ]),
-            startPoint: .top,
-            endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-
+            LinearGradient(gradient: Gradient(colors: [Color.black, Color.green.opacity(0.4)]), startPoint: .top, endPoint: .bottom)
+                .edgesIgnoringSafeArea(.all)
             ScrollView {
-                
                 VStack {
+               
+                    HStack {
+                        Spacer()
+                        Button {
+                            shouldShowLogOutOptions.toggle()
+                        } label: {
+                            Image(systemName: "gear")
+                                .font(.system(size: 24, weight: .bold))
+                                .foregroundColor(Color.white)
+                                .padding()
+                        }
+                        .actionSheet(isPresented: $shouldShowLogOutOptions) {
+                            .init(title: Text("Settings"), message: Text("What do you want to do?"), buttons: [
+                                .destructive(Text("Sign out"), action: {
+                                    print("Handle sign out")
+                                    vm.handelSignOut()
+                                }),
+                                .cancel()
+                            ])
+                        }
+                        .fullScreenCover(isPresented: $vm.isUserCurrentlyLoggedOut, onDismiss: nil) {
+                            SigninView(didCompleteLoginProcess:{
+                                self.vm.isUserCurrentlyLoggedOut = false
+                                self.vm.fetchCurrentUser()
+                                self.vm.fetchRecentMessage()
+                            })
+                        }
+                    }
+//                    .padding(.top, 20) // Adjust the padding as needed
+
                     Image(systemName: "person.fill")
-                          .foregroundColor(.white)
-                          .font(.system(size: 50))
-                          .padding(.top, 40)
-                } .padding(.top, 40)
-                   
+                        .foregroundColor(.white)
+                        .font(.system(size: 50))
+                        .padding(.top, 40)
+                }
+                .padding(.top, 40)
                 VStack {
                     VStack(alignment: .leading, spacing: 15) {
 

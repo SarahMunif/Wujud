@@ -9,13 +9,20 @@ import SwiftUI
 import Firebase
 import FirebaseAuth
 
+
+
 struct UserProfileView: View {
+    @State var shouldShowLogOutOptions = false
+    @ObservedObject private var vm = MainMessagesViewModel()
+
     @State private var currentUser: [String: Any] = [:]
     @State private var errorMessage = ""
     @State private var isEditing = false
     @State private var editedFields: [String: String] = [:] // To store edited values
 
     var body: some View {
+  
+    
         ZStack {
             // Background Gradient
             LinearGradient(gradient: Gradient(colors: [
@@ -26,15 +33,46 @@ struct UserProfileView: View {
             startPoint: .top,
             endPoint: .bottom)
             .edgesIgnoringSafeArea(.all)
-
+     
             ScrollView {
+                
                 VStack {
+                    // Add a HStack to position the gear button in the top-right corner
+                    HStack {
+                        Spacer()
+                        Button {
+                            shouldShowLogOutOptions.toggle()
+                        } label: {
+                            Image(systemName: "gear")
+                                .font(.system(size: 24, weight: .bold))
+                                .foregroundColor(Color.white)
+                                .padding()
+                        }
+                        .actionSheet(isPresented: $shouldShowLogOutOptions) {
+                            .init(title: Text("Settings"), message: Text("What do you want to do?"), buttons: [
+                                .destructive(Text("Sign out"), action: {
+                                    print("Handle sign out")
+                                    vm.handelSignOut()
+                                }),
+                                .cancel()
+                            ])
+                        }
+                        .fullScreenCover(isPresented: $vm.isUserCurrentlyLoggedOut, onDismiss: nil) {
+                            SigninView(didCompleteLoginProcess:{
+                                self.vm.isUserCurrentlyLoggedOut = false
+                                self.vm.fetchCurrentUser()
+                                self.vm.fetchRecentMessage()
+                            })
+                        }
+                    }
+//                    .padding(.top, 20) // Adjust the padding as needed
+
                     Image(systemName: "person.fill")
-                          .foregroundColor(.white)
-                          .font(.system(size: 50))
-                          .padding(.top, 40)
-                } .padding(.top, 40)
-                   
+                        .foregroundColor(.white)
+                        .font(.system(size: 50))
+                        .padding(.top, 40)
+                }
+                .padding(.top, 40)
                 VStack {
                     // Profile Info Section
                     VStack(alignment: .leading, spacing: 15) {
