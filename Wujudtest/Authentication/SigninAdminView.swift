@@ -293,7 +293,7 @@ struct ExtraFieldView: View {
         }
         .navigationTitle("")
         .navigationDestination(isPresented: $isNavigating) {
-            HomeView()
+            AdminCongratsView()
         }
     }
 }

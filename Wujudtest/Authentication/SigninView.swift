@@ -92,9 +92,9 @@ struct PlaceholderTextField: View {
 struct SigninView: View {
     @State private var isLoginMode = false
     let didCompleteLoginProcess: () -> Void
-
+    
     @StateObject private var viewModel = SigninViewModel()
-
+    
     var body: some View {
         ZStack {
             // MARK: - Updated Gradient Background
@@ -103,13 +103,13 @@ struct SigninView: View {
                 Color(red: 0x58 / 255, green: 0xC0 / 255, blue: 0x91 / 255),  // #58C091
                 Color(red: 0x02 / 255, green: 0x10 / 255, blue: 0x24 / 255)   // #021024
             ]),
-            startPoint: .top,
-            endPoint: .bottom)
+                           startPoint: .top,
+                           endPoint: .bottom)
             .edgesIgnoringSafeArea(.all)
-
+            
             VStack {
                 Spacer(minLength: 80)
-
+                
                 // Form Container
                 VStack(spacing: 20) {
                     // Title
@@ -122,18 +122,18 @@ struct SigninView: View {
                     }
                     // Subtext
                     HStack(alignment: .top, spacing: 0) {
-                        Text("If you don’t have an account register \n you can ")
+                        Text("If you don’t have an account you can ")
                             .foregroundColor(.white.opacity(0.8))
-                            .font(.system(size: 14))
+                            .font(.system(size: 10))
                         NavigationLink(destination: AuthenticationView()) {
                             Text("Register here !")
                                 .foregroundColor(.green)
-                                .font(.system(size: 14))
+                                .font(.system(size: 12))
                                 .fontWeight(.bold)
                         }
                     }
                     
-
+                    
                     // Email Field
                     HStack {
                         Image(systemName: "envelope")
@@ -146,11 +146,11 @@ struct SigninView: View {
                     .padding()
                     .background(Color.black.opacity(0.3))
                     .cornerRadius(10)
-
+                    
                     // Password Field
                     HStack {
-                        Image(systemName: "lock")
-                            .foregroundColor(Color.white)
+//                        Image(systemName: "lock")
+//                            .foregroundColor(Color.white)
                         SecureField("********", text: $viewModel.password)
                             .textFieldStyle(PlainTextFieldStyle())
                             .foregroundColor(Color.white)
@@ -164,7 +164,7 @@ struct SigninView: View {
                     .padding()
                     .background(Color.black.opacity(0.3))
                     .cornerRadius(10)
-
+                    
                     // Error Message
                     if let errorMessage = viewModel.errorMessage {
                         Text(errorMessage)
@@ -172,7 +172,7 @@ struct SigninView: View {
                             .font(.caption)
                             .padding(.top, 5)
                     }
-
+                    
                     // Sign In Button
                     Button {
                         viewModel.signIn()
@@ -190,7 +190,7 @@ struct SigninView: View {
                 .background(Color.black.opacity(0.3))
                 .cornerRadius(25)
                 .padding(.horizontal, 40)
-
+                
                 Spacer()
             }
         }
@@ -201,9 +201,11 @@ struct SigninView: View {
         }
         .navigationDestination(isPresented: $viewModel.isSignedIn) {
             if viewModel.isAdmin {
-                AdminProfile()
+                AdminHomePage()
+                    .navigationBarBackButtonHidden(true) // Hide back button
             } else {
-                UserProfileView()
+                UserHomePage()
+                    .navigationBarBackButtonHidden(true) // Hide back button
             }
         }
     }

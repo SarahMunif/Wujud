@@ -15,16 +15,18 @@ struct BoothInfoView: View {
     @State private var editedFields: [String: Any] = [:] // Updated to store any type of value (e.g., String, Bool)
     @State private var noBoothFound = false
 
+    // Size options for the picker
+    let sizeOptions = ["Startup", "Mid-size", "Enterprise"]
+
     var body: some View {
         ZStack {
             LinearGradient(gradient: Gradient(colors: [Color.black, Color.green.opacity(0.4)]), startPoint: .top, endPoint: .bottom)
-            
-            .edgesIgnoringSafeArea(.all)
+                .edgesIgnoringSafeArea(.all)
             
             ScrollView {
                 VStack {
                     if noBoothFound {
-                        Text("There is no booth for this admin. Click here to add one.")
+                        Text("There is no booth for you. Click here to add one.")
                             .foregroundColor(.white)
                             .font(.headline)
                             .padding()
@@ -45,8 +47,10 @@ struct BoothInfoView: View {
                             BoothEditableInfoView(title: "Description", value: boothData["description"] as? String ?? "Not available", key: "description", isEditing: $isEditing, editedFields: $editedFields)
                             BoothEditableInfoView(title: "Industry", value: boothData["industry"] as? String ?? "Not available", key: "industry", isEditing: $isEditing, editedFields: $editedFields)
                             BoothEditableInfoView(title: "Region", value: boothData["region"] as? String ?? "Not available", key: "region", isEditing: $isEditing, editedFields: $editedFields)
-                            BoothEditableInfoView(title: "Size", value: boothData["size"] as? String ?? "Not available", key: "size", isEditing: $isEditing, editedFields: $editedFields)
-                            
+
+                            // Use Picker for size when editing
+                            BoothEditableInfoView(title: "Size", value: boothData["size"] as? String ?? "Not available", key: "size", isEditing: $isEditing, editedFields: $editedFields, sizeOptions: sizeOptions)
+
                             // Seeks Investment, Offers Training, Is Hiring (Boolean values displayed as Yes/No)
                             BoothEditableInfoView(title: "Seeks Investment", value: (boothData["seeksInvestment"] as? Bool ?? false) ? "Yes" : "No", key: "seeksInvestment", isEditing: $isEditing, editedFields: $editedFields, isBoolean: true)
                             BoothEditableInfoView(title: "Offers Training", value: (boothData["offersTraining"] as? Bool ?? false) ? "Yes" : "No", key: "offersTraining", isEditing: $isEditing, editedFields: $editedFields, isBoolean: true)
@@ -100,9 +104,8 @@ struct BoothInfoView: View {
             return
         }
 
-        // Fetch booth data where the ownerId matches the logged-in user's UID
         Firestore.firestore().collection("booths")
-            .whereField("ownerId", isEqualTo: uid) // Check for the booth belonging to the current admin
+            .whereField("ownerId", isEqualTo: uid)
             .getDocuments { snapshot, error in
                 if let error = error {
                     self.errorMessage = "Failed to fetch booth data: \(error.localizedDescription)"
@@ -123,13 +126,11 @@ struct BoothInfoView: View {
             return
         }
 
-        // Prepare the updated data
         var updatedData: [String: Any] = [:]
         for (key, value) in editedFields {
             updatedData[key] = value
         }
 
-        // Update Firestore (update the booth data where ownerId matches)
         Firestore.firestore().collection("booths").whereField("ownerId", isEqualTo: uid).getDocuments { snapshot, error in
             if let error = error {
                 self.errorMessage = "Failed to fetch booth for update: \(error.localizedDescription)"
@@ -140,13 +141,12 @@ struct BoothInfoView: View {
                 return
             }
 
-            // Update the booth document
             document.reference.updateData(updatedData) { error in
                 if let error = error {
                     self.errorMessage = "Failed to update booth data: \(error.localizedDescription)"
                 } else {
                     self.isEditing = false
-                    self.editedFields = [:] // Reset edited fields
+                    self.editedFields = [:]
                     fetchBoothData() // Refresh the booth data
                 }
             }
@@ -160,7 +160,8 @@ struct BoothEditableInfoView: View {
     var key: String
     @Binding var isEditing: Bool
     @Binding var editedFields: [String: Any]
-    var isBoolean: Bool = false // Determines if the value should be a toggle
+    var isBoolean: Bool = false
+    var sizeOptions: [String]? = nil // For size field only
 
     var body: some View {
         HStack {
@@ -180,7 +181,22 @@ struct BoothEditableInfoView: View {
                     }
                     .toggleStyle(SwitchToggleStyle(tint: .green))
                     .padding()
+                } else if let options = sizeOptions {
+                    // Picker for size field
+                    Picker("Size", selection: Binding(
+                        get: { editedFields[key] as? String ?? value },
+                        set: { editedFields[key] = $0 }
+                    )) {
+                        ForEach(options, id: \.self) { option in
+                            Text(option)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .padding()
+                    .background(Color.white.opacity(0.7))
+                    .cornerRadius(10)
                 } else {
+                    // Regular TextField for other fields
                     TextField(value, text: Binding(
                         get: { editedFields[key] as? String ?? value },
                         set: { editedFields[key] = $0 }
@@ -198,7 +214,7 @@ struct BoothEditableInfoView: View {
             Spacer()
         }
         .padding()
-        .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.2))) // Updated color
+        .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.2)))
     }
 }
 

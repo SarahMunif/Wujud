@@ -55,7 +55,7 @@ struct TutorialView: View {
                     }
                     
                     Button(action: {
-                        // Handle skip action
+                        AdminHomePage()
                     }) {
                         Text("Skip")
                             .frame(width: 100, height: 40)

@@ -213,12 +213,14 @@ struct ChatLogView: View{
     @ObservedObject var vm : ChatLogViewModel
      
     var body: some View{
+        ZStack{
         
-        VStack{
-         messgesView
-            Text(vm.errorMessage)
-         chatBottomBar
-
+            VStack{
+                messgesView
+                Text(vm.errorMessage)
+                chatBottomBar
+                
+            }
         }
 
         .navigationTitle(chatUser?.username ?? "")
@@ -261,9 +263,9 @@ struct ChatLogView: View{
     private var chatBottomBar: some View
     {
         HStack (spacing: 16){
-            Image(systemName: "photo.on.rectangle")
-                .font(.system(size: 24))
-                .foregroundColor(Color(.darkGray))
+//            Image(systemName: "paperclip")
+//                .font(.system(size: 24))
+//                .foregroundColor(Color(.darkGray))
 //                TextEditor(text: $chatText)
             TextField("Description", text: $vm.chatText)
             
@@ -275,7 +277,7 @@ struct ChatLogView: View{
             }
             .padding(.horizontal)
             .padding(.vertical,8)
-            .background(Color.blue)
+            .background(Color.green)
             .cornerRadius(15)
 
         }
@@ -299,7 +301,7 @@ struct MessageView: View{
 
                     }
                     .padding()
-                    .background(Color.blue)
+                    .background(Color.green)
                     .cornerRadius(15)
                 }
 

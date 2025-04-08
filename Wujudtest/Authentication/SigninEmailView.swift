@@ -311,7 +311,7 @@ struct ExtraFieldsView: View {
         }
         .navigationTitle("")
         .navigationDestination(isPresented: $isNavigating) {
-            HomeView() // Navigate to HomeView when isNavigating = true
+            congratsView() // Navigate to HomeView when isNavigating = true
         }
     }
 }

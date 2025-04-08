@@ -12,29 +12,28 @@ struct BoothCreationView: View {
     @State private var description: String = ""
     @State private var industry: String = ""
     @State private var region: String = ""
-    @State private var size: String = ""
+    @State private var size: String = "Startup" // Default size option
     @State private var seeksInvestment: Bool = false
     @State private var offersTraining: Bool = false
     @State private var isHiring: Bool = false
     
     @State private var navigateToHome = false // State variable for navigation
 
+    let sizeOptions = ["Startup", "Mid-size", "Enterprise"] // Available size options
+
     var body: some View {
         NavigationView {
             ZStack {
-                // Apply the LinearGradient background to the entire screen
                 LinearGradient(gradient: Gradient(colors: [Color.black, Color.green.opacity(0.4)]), startPoint: .top, endPoint: .bottom)
-                    .edgesIgnoringSafeArea(.all) // Ensure it covers the entire screen
+                    .edgesIgnoringSafeArea(.all)
                 
                 VStack {
-                    // Title and the rest of the UI
-                    Text("start creat a booth ")
+                    Text("Start creating a booth")
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
                         .padding(.top, 20)
                     
-                    // Booth creation form
                     VStack(spacing: 20) {
                         TextField("Company Name", text: $companyName)
                             .padding()
@@ -60,11 +59,16 @@ struct BoothCreationView: View {
                             .cornerRadius(10)
                             .foregroundColor(.black)
                         
-                        TextField("Size for eg mid size , start up,..", text: $size)
-                            .padding()
-                            .background(Color.white.opacity(0.7))
-                            .cornerRadius(10)
-                            .foregroundColor(.black)
+                        // Replace TextField with Picker for selecting size
+                        Picker("Size", selection: $size) {
+                            ForEach(sizeOptions, id: \.self) { option in
+                                Text(option)
+                            }
+                        }
+                        .pickerStyle(SegmentedPickerStyle()) // Segment style for better UI
+                        .padding()
+                        .background(Color.white.opacity(0.7))
+                        .cornerRadius(10)
                         
                         Toggle(isOn: $seeksInvestment) {
                             Text("Seeks Investment")

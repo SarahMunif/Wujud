@@ -149,54 +149,60 @@ struct MainMessagesView: View {
 
     @ObservedObject private var vm = MainMessagesViewModel()
     var body: some View {
+        
         NavigationView {
-
-
-            VStack{
-                customNavBar
-                messagesView
+            ZStack {
+                LinearGradient(gradient: Gradient(colors: [Color.black, Color.green.opacity(0.4)]), startPoint: .top, endPoint: .bottom)
+                    .edgesIgnoringSafeArea(.all)
                 
-                NavigationLink("", isActive:
-                                $shouldNavigateToChatLogView) {
-                    ChatLogView(chatUser: self.chatUser)
+                
+                VStack{
+                    
+                    customNavBar
+                    messagesView
+                    
+                    NavigationLink("", isActive:
+                                    $shouldNavigateToChatLogView) {
+                        ChatLogView(chatUser: self.chatUser)
+                    }
+                    
                 }
-                
-           }
-            .overlay(
- 
-                newMessageButton, alignment: .bottom)
-            .navigationBarHidden(true)
+                .overlay(
+                    
+                    newMessageButton, alignment: .bottom)
+                .navigationBarHidden(true)
             }
+        }
     }
-
     
     private var customNavBar: some View {
+        
         HStack{
             
-            VStack(alignment: .leading, spacing: 4){
-                Text("\(vm.chatUser?.username ?? "")")
-                    .font(.system(size: 24, weight: .bold))
-                HStack{
-                    Circle()
-                        .foregroundColor(Color(.green))
-                        .frame(width: 14, height: 14)
-                    Text("online")
-                        .font(.system(size: 12))
-                        .foregroundColor(Color(.lightGray))
-                }
-                
-                
-            }
+//            VStack(alignment: .leading, spacing: 4){
+//                Text("\(vm.chatUser?.username ?? "")")
+//                    .font(.system(size: 24, weight: .bold))
+//                HStack{
+//                    Circle()
+//                        .foregroundColor(Color(.green))
+//                        .frame(width: 14, height: 14)
+//                    Text("online")
+//                        .font(.system(size: 12))
+//                        .foregroundColor(Color(.lightGray))
+//                }
+//                
+//                
+//            }
             Spacer()
-            Button {
-                shouldShowLogOutOptions.toggle()
-            } label: {
-                Image(systemName: "gear")
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundColor(Color.black)
-                    
-
-            }
+//            Button {
+//                shouldShowLogOutOptions.toggle()
+//            } label: {
+//                Image(systemName: "gear")
+//                    .font(.system(size: 24, weight: .bold))
+//                    .foregroundColor(Color.black)
+//                    
+//
+//            }
         }
         .padding()
         .actionSheet(isPresented: $shouldShowLogOutOptions) {
@@ -231,24 +237,26 @@ struct MainMessagesView: View {
                         self.shouldNavigateToChatLogView.toggle()
                     } label: {
                         HStack(spacing: 16){
-                            Image(systemName: "person.fill")
+                            Image(systemName: "person")
                                 .font(.system(size: 32))
                                 .padding()
                                 .overlay(RoundedRectangle(cornerRadius: 44).stroke(Color.black, lineWidth:1)
                                 )
                             VStack(alignment: .leading, spacing: 8){
                                 Text(recentMessage.username)
-                                    .font(.system(size: 12))
-                                    .foregroundColor(Color(.label))
+                                    .font(.system(size: 16, weight:.semibold))
+                                    .foregroundColor(Color(.white))
 
                                 Text(recentMessage.text)
                                     .font(.system(size: 12))
-                                    .foregroundColor(Color(.lightGray))
+                                    .foregroundColor(Color(.white))
                                 
                             }
                             Spacer()
                             Text(recentMessage.timeAgo)
                                 .font(.system(size:14, weight:.semibold))
+                                .foregroundColor(Color(.white))
+
                         }
                     }
                     Divider()
@@ -277,18 +285,22 @@ struct MainMessagesView: View {
             }
                 .foregroundColor(Color.white)
                 .padding(.vertical)
-                .background(Color.blue)
+                .background(Color.green)
                 .cornerRadius(24)
                 .padding(.horizontal)
                 .shadow( radius: 15)
         }
+        
         .fullScreenCover(isPresented: $shouldShowNewMessageScreen) {
             CreateNewMessageView(didSelectNewUser: {user in
                 print(user.email)
                 self.shouldNavigateToChatLogView.toggle()
                 self.chatUser = user
+                
             })
+
         }
+        
     }
     
     @State var chatUser: ChatUser?
