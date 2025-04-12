@@ -17,6 +17,8 @@
 		6AA6F10B2D4254270009F311 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 6AA6F10A2D4254270009F311 /* FirebaseAuth */; };
 		6AA6F11F2D452CF30009F311 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 6AA6F11E2D452CF30009F311 /* FirebaseFirestore */; };
 		6AED3A7C2D7B8F5C007ED5E6 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 6AED3A7B2D7B8F5C007ED5E6 /* FirebaseStorage */; };
+		6AFAD0F52DA5C4DF00912C75 /* UnityFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AFAD0F22DA5C48A00912C75 /* UnityFramework.framework */; };
+		6AFAD0F62DA5C4DF00912C75 /* UnityFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6AFAD0F22DA5C48A00912C75 /* UnityFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FB42A64B94F99BB16E713B57 /* Pods_WujudtestTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13AD4EB22DCE9F3FFB2ABA50 /* Pods_WujudtestTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -35,7 +37,28 @@
 			remoteGlobalIDString = 6AA6F0D32D416C6B0009F311;
 			remoteInfo = Wujudtest;
 		};
+		6AFAD0F12DA5C48A00912C75 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6AFAD0E42DA5C48900912C75 /* Unity-iPhone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9D25AB9D213FB47800354C27;
+			remoteInfo = UnityFramework;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6AFAD0F72DA5C4DF00912C75 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6AFAD0F62DA5C4DF00912C75 /* UnityFramework.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0223CAA63113CE6810CCEF7A /* Pods_Wujudtest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Wujudtest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,6 +73,7 @@
 		6AA6F0D42D416C6B0009F311 /* Wujudtest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wujudtest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AA6F0E52D416C6E0009F311 /* WujudtestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WujudtestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AA6F0EF2D416C6E0009F311 /* WujudtestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WujudtestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6AFAD0E42DA5C48900912C75 /* Unity-iPhone.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Unity-iPhone.xcodeproj"; path = "/Users/it/unityExport/Unity-iPhone.xcodeproj"; sourceTree = "<absolute>"; };
 		728EB918E632D71439821C69 /* Pods_WujudtestUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WujudtestUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3FB2F6CC71B8110C0675197 /* Pods-Wujudtest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wujudtest.debug.xcconfig"; path = "Target Support Files/Pods-Wujudtest/Pods-Wujudtest.debug.xcconfig"; sourceTree = "<group>"; };
 		C43CE504AEF1F82AF988965E /* Pods-WujudtestUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WujudtestUITests.release.xcconfig"; path = "Target Support Files/Pods-WujudtestUITests/Pods-WujudtestUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -78,6 +102,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6AFAD0F52DA5C4DF00912C75 /* UnityFramework.framework in Frameworks */,
 				6AA6F1062D41827B0009F311 /* FirebaseAnalytics in Frameworks */,
 				6AA6F11F2D452CF30009F311 /* FirebaseFirestore in Frameworks */,
 				6AA6F10B2D4254270009F311 /* FirebaseAuth in Frameworks */,
@@ -132,6 +157,7 @@
 		6AA6F0CB2D416C6B0009F311 = {
 			isa = PBXGroup;
 			children = (
+				6AFAD0E42DA5C48900912C75 /* Unity-iPhone.xcodeproj */,
 				6AA6F0D62D416C6B0009F311 /* Wujudtest */,
 				6A7861122D4F5B9F005F9245 /* Firestore */,
 				6AA6F0E82D416C6E0009F311 /* WujudtestTests */,
@@ -162,6 +188,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		6AFAD0E72DA5C48A00912C75 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6AFAD0F22DA5C48A00912C75 /* UnityFramework.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -174,6 +208,7 @@
 				6AA6F0D12D416C6B0009F311 /* Frameworks */,
 				6AA6F0D22D416C6B0009F311 /* Resources */,
 				D771B55912B99639FDB9588E /* [CP] Embed Pods Frameworks */,
+				6AFAD0F72DA5C4DF00912C75 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -276,6 +311,12 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6AA6F0D52D416C6B0009F311 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 6AFAD0E72DA5C48A00912C75 /* Products */;
+					ProjectRef = 6AFAD0E42DA5C48900912C75 /* Unity-iPhone.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				6AA6F0D32D416C6B0009F311 /* Wujudtest */,
@@ -284,6 +325,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		6AFAD0F22DA5C48A00912C75 /* UnityFramework.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = UnityFramework.framework;
+			remoteRef = 6AFAD0F12DA5C48A00912C75 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		6AA6F0D22D416C6B0009F311 /* Resources */ = {
@@ -384,9 +435,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Wujudtest/Pods-Wujudtest-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Wujudtest/Pods-Wujudtest-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -574,7 +629,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 15.1;
@@ -615,7 +670,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "\"$(inherited) @executable_path/Frameworks\"";
 				MACOSX_DEPLOYMENT_TARGET = 15.1;
