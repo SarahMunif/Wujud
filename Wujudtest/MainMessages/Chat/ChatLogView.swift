@@ -38,7 +38,6 @@ struct ChatMessage : Identifiable{ //Identifiable so it can be iterated over
 }
 /// /// //// /////////// ////////////////
 class ChatLogViewModel: ObservableObject{
-    
     @Published var chatText = ""
     @Published var errorMessage = ""
     @Published var chatMessages = [ChatMessage]()
@@ -46,9 +45,7 @@ class ChatLogViewModel: ObservableObject{
     @Published var chatUser: ChatUser?
 
     init(chatUser: ChatUser?){
-        
         self.chatUser = chatUser
-        
         fetchMessages()
         
     }

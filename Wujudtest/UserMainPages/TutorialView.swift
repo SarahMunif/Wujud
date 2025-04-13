@@ -43,29 +43,16 @@ struct TutorialView: View {
                             .cornerRadius(10)
                     )
                 
-                HStack(spacing: 20) {
-                    Button(action: {
-                      
-                    }) {
-                        Text("Watch")
-                            .frame(width: 100, height: 40)
-                            .background(Color.green)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    
-                    Button(action: {
-                        AdminHomePage()
-                    }) {
-                        Text("Skip")
-                            .frame(width: 100, height: 40)
-                            .background(Color.black.opacity(0.8))
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
+                NavigationLink(destination: UserHomePage()) {
+                    Text("Skip")
+                        .frame(width: 100, height: 40)
+                        .background(Color.black.opacity(0.8))
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
                 }
             }
         }
+        .navigationBarHidden(true)  // Hide the navigation bar
     }
 }
 

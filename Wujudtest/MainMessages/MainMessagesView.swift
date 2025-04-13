@@ -56,14 +56,7 @@ class MainMessagesViewModel: ObservableObject{
     
     @Published var errorMessage = ""
     @Published var chatUser : ChatUser?
-    
-    
     init(){
-//        DispatchQueue.main.async {
-//            self.isUserCurrentlyLoggedOut = true
-//            AuthenticationManger.shared.auth.currentUser?.uid == nil
-//            
-//        }
         AuthenticationManger.shared.auth.currentUser?.uid == nil
         fetchCurrentUser()
         
@@ -72,7 +65,6 @@ class MainMessagesViewModel: ObservableObject{
     @Published var recentMessages = [RecentMessage]()
     private var firestoreListener: ListenerRegistration?
 
-    
      func fetchRecentMessage() {
         guard let uid = AuthenticationManger.shared.auth.currentUser?.uid
         else{return}
@@ -100,7 +92,6 @@ class MainMessagesViewModel: ObservableObject{
                 
             })
         }
-        
     }
     
     

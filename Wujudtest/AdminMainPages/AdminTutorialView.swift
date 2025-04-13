@@ -45,19 +45,7 @@ struct AdminTutorialView: View {
                     )
                 
                 HStack(spacing: 20) {
-                    Button(action: {
-                      
-                    }) {
-                        Text("Watch")
-                            .frame(width: 100, height: 40)
-                            .background(Color.green)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    
-                    Button(action: {
-                        // Handle skip action
-                    }) {
+                    NavigationLink(destination: AdminHomePage()) {
                         Text("Skip")
                             .frame(width: 100, height: 40)
                             .background(Color.black.opacity(0.8))

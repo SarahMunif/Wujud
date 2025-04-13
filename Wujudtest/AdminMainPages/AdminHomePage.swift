@@ -105,8 +105,6 @@ struct AdminHomePage: View {
     }
 }
 
-struct AdminHomePageView_Previews: PreviewProvider {
-    static var previews: some View {
-        AdminHomePage()
-    }
+#Preview {
+    AdminHomePage() 
 }

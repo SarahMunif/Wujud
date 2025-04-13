@@ -10,7 +10,6 @@ import SwiftUI
 struct congratsView: View {
     var body: some View {
         ZStack {
-            // MARK: - Background Gradient
             LinearGradient(gradient: Gradient(colors: [Color.black, Color.green.opacity(0.4)]), startPoint: .top, endPoint: .bottom)
             
             .edgesIgnoringSafeArea(.all)
@@ -18,7 +17,6 @@ struct congratsView: View {
             VStack(alignment: .leading) {
                 Spacer()
                 
-                // MARK: - Congrats Card
                 VStack(alignment: .leading) {
                     Text("Congratulations!")
                         .font(.title)

@@ -30,10 +30,10 @@ final class SigninViewModel: ObservableObject {
 
                 case .wrongPassword:
                     self?.errorMessage = "Email and password do not match. Please try again."
-//                case .invalidEmail:
-//                    self?.errorMessage = "Invalid email format. Please enter a valid email."
+                case .invalidEmail:
+                    self?.errorMessage = "Invalid email format. Please enter a valid email."
                 default:
-                    self?.errorMessage = "Email and password do not match. Please try again."
+                    self?.errorMessage = "Somthing went wrong. Please try again."
                 }
             } else {
                 print("✅ User signed in successfully")
@@ -52,14 +52,12 @@ final class SigninViewModel: ObservableObject {
         db.collection("admins").document(user.uid).getDocument { [weak self] (document, error) in
             if let error = error {
                 print("Error fetching user role: \(error)")
-                self?.isAdmin = false // Default to regular user if there's an error
-                // Fallback: fetch the regular user's data
+                self?.isAdmin = false // Default to regular user if there's an error (if no admin it means it is a regular user)
+                
                 UserManger.shared.fetchCurrentUser()
             } else {
                 if let data = document?.data() {
                     self?.isAdmin = true
-                    self?.firstName = data["firstName"] as? String ?? ""
-                    self?.lastName = data["lastName"] as? String ?? ""
                 } else {
                     self?.isAdmin = false
                     UserManger.shared.fetchCurrentUser()
@@ -202,10 +200,10 @@ struct SigninView: View {
         .navigationDestination(isPresented: $viewModel.isSignedIn) {
             if viewModel.isAdmin {
                 AdminHomePage()
-                    .navigationBarBackButtonHidden(true) // Hide back button
+                    .navigationBarBackButtonHidden(true)
             } else {
                 UserHomePage()
-                    .navigationBarBackButtonHidden(true) // Hide back button
+                    .navigationBarBackButtonHidden(true)
             }
         }
     }
